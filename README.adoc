@@ -1,4 +1,3 @@
-// INSTRUCTION: The copyright statement must appear at the top of the file
 //
 // Copyright (c) 2019 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
@@ -8,304 +7,493 @@
 // Contributors:
 //     IBM Corporation
 //
-:page-layout: guide-multipane
-// INSTRUCTION: The project id is the part of the git repository after the guide- and must be specified
-// :projectid: github repo name without the `guide-` prefix
-:projectid: template
-// INSTRUCTION: Provide an estimate of how long the guide will take to go through.
-:page-duration: 15 minutes
-// INSTRUCTION: Provide the date when the guide is published.  Format is YYYY-MM-DD.
-:page-releasedate: 2019-03-11
-// INSTRUCTION: Provide a description for the guide index page.
-:page-description: Learn how to create a todo list API as a REST service using JAX-RS, and Open Liberty.
-:guide-author: Open Liberty
-// INSTUCTION: Please provide relevant tags, try to avoid inventing new ones.
-// Use some of "MicroProfile, Maven, Docker, Kubernetes, Gradle, Java EE, Security".
-:page-tags: ['Java EE']
-// INSTRUCTION: Specify the unique name of the guide that is used in the permalink.
-:page-related-guides: ['cdi-intro', 'rest-intro']
-// INSTRUCTION: Set 'basic', 'microprofile', 'none'
-:page-guide-category: microprofile
-// INSTRUCTION: Places the guide into the essentials section of a category
-// Requirement: Must define :page-guide-category:
-:page-essential: false
-// INSTRUCTION: Number is used to sort guide from left (lowest number) to right (highest number) in
-// the essentials section of a category
-// Requirement: Must have :page-essential: true
-:page-essential-order: 3
-// INSTRUCTION: Specify the slug in the website. This must be unique.
+:projectid: cloud-aws
+:page-layout: guide
+:page-duration: 4 hours
+:page-releasedate: 2019-04-01
+:page-description: Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes and manage your cluster.
+:page-tags: ['Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
-// INSTRUCTION: Source the common page elements, clone `git@github.com:OpenLiberty/guides-common.git`.
+:page-related-guides: ['kubernetes-intro']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
-// INSTRUCTION: Update the SEO title for the guide
-:page-seo-title: Creating a REST service
-// INSTRUCTION: Update the SEO description for the guide
-:page-seo-description: Find out how to create a REST service on Open Liberty
-// INSTRUCTION: You can't have a new line between the attributes and the title.
-= Title of guide, starting with a gerund (Creating, Administering, and so on)
-// EXAMPLE: Creating a REST API for a todo list application
+:source-highlighter: prettify
+:page-seo-title: Amazon Elastic Container Service (EKS) tutorial
+:page-seo-description: How to deploy microservices to Amazon EKS
+:guide-author: Open Liberty
+= Deploying microservices to Amazon Elastic Container Service for Kubernetes
 
 [.hidden]
-NOTE: This repository contains the guide documentation source. To view the guide in published form,
-view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
+ 
+Explore how to push Docker images to a Amazon Elastic Container Registry and run them inside of containers on Amazon Elastic Container Sercice for Kubernetes.
 
-// Start the introduction with "You'll explore how to..." or something similarly catchy.
-// Write no more than two sentences, with meaningful information on what the user can accomplish
-// with this guide.
-// Do not start the introduction with "This guide...".
-// EXAMPLE: Learn how to create a todo list API as a REST service using JAX-RS, CDI, and Open Liberty.
+:kube: Kubernetes
+:hashtag: #
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
+:name-api: http://[hostname]:31000/api/name
+:ping-api: http://[hostname]:32000/api/ping
 
 
+// =================================================================================================
+// What is {kube}
+// =================================================================================================
 
+== Why use Kubernetes services in the cloud?
+
+Single node {kube} clusters such as Minikube and Docker Desktop are great for testing your 
+microservices locally, but ultimately you will want a system that can handle production workloads. 
+Various clouds offer solutions for running your workloads in a {kube} cluster. Using a 
+cloud-based infrastructure allows you to focus on developing your microservices rather than 
+worrying about details related to the servers you'll deploy them to. Using cloud will allow 
+you to more easily scale your microservices and serve them in a high-availability set up.
+
+// =================================================================================================
+// Introduction
+// =================================================================================================
 
 == What you'll learn
 
-// Write about what the user will learn in a meaningful intro paragraph.
-// Follow the intro paragraph with more details of what the user will learn, but still keep it brief.
-// See the REST guide at as an exemplar guide.
-// https://openliberty.io/guides/rest-intro.html
-// https://github.com/OpenLiberty/guide-rest-intro
+You will learn how to deploy two microservices in Open Liberty containers to a {kube}
+cluster on Amazon Elastic Container Service for Kubernetes (EKS). You will use `helm` to 
+deploy these microservices using Open Liberty Helm charts. Helm is a package manager for 
+{kube}. It uses templates to generate {kube} yaml files and then deploys and manages them 
+as releases to your cluster.
 
-// EXAMPLE:
-// =============================================================================
-You'll learn how to create a todo list microservice using JAX-RS, CDI and Open Liberty.
-You will use Maven throughout the guide to build the microservice and deploy it
-to run on the Open Liberty application server.
+Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon EKS. EKS simplifies
+the process of running Kubernetes on AWS without needing to install or maintain your own
+Kubernetes control plane. It provides a hosted {kube} cluster that you may deploy your 
+microservices to. You will use it in conjunction with Amazon Elastic Container Registry (ECR).
 
-=== What is JAX-RS
-* Add a brief description of JAX-RS
+The two microservices you'll deploy are called `name` and `ping`. The `name` microservice
+displays a brief greeting and the name of the container it's running in. This message 
+makes it easy to differentiate it from its other replicas. The `ping` microservice
+pings the {kube} Service that encapsulates the `name` pods. This communication demonstrates
+how communication can be established between pods inside a cluster.
 
-=== What is CDI
-* Add a brief description of CDI
+// =================================================================================================
+// Prerequisites
+// =================================================================================================
 
-=== What is Open Liberty
-* Add brief description of Open Liberty, where applicable
+== Prerequisites
 
-Brief description of the todo list micrioservice
-// =============================================================================
+Throughout this guide you will need to use the AWS Command Line Interface (CLI). To install
+the AWS CLI, you must have Python installed. See the https://www.python.org/downloads/[official documentation^] 
+for downloading Python.
+
+Once you have Python installed, run the following command to install the AWS CLI.
+
+[role=command]
+```
+pip install awscli --upgrade --user
+```
+
+For more information or alternate ways to install the AWS CLI, see the
+https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html[installing the AWS CLI^]
+documentation. 
+
+To verify that the AWS CLI is installed correctly, run the following command.
+
+[role=command]
+```
+aws --version
+```
+
+Once the AWS CLI is installed, it must be configured by running the AWS configure command.
+
+[role=command]
+```
+aws configure
+```
+
+You will be prompted for for several pieces of information, including an AWS access key 
+and an AWS secret access key. These keys are associated with an AWS Identity and Access
+Management (IAM) user. Navigate to the https://console.aws.amazon.com/iam/home[Identity and Access Management^]
+dashboard and create a user through the UI. While creating a user, you will need to add
+the user to a group. If you do not have an existing group, you will need to create a new one. 
+
+After you are done filling out the various pieces of information, the settings will be 
+stored in the default profile. Anytime you run an AWS CLI command without specifying 
+a profile, the default profile will be used. 
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
+
+[role=command]
+include::{common-includes}/gitclone.adoc[]
+
+// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
+
+== Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
+
+=== Provisioning a cluster
+
+To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
+IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[installing aws-iam-authenticator^]
+instructions for installing on your platform. 
+
+In this guide, we will use `eksctl` to create the Kubernetes cluster on EKS. The `eksctl`
+CLI tool greatly simplifies the process of creating clusters on EKS. Navigate to the 
+https://github.com/weaveworks/eksctl/releases[eksctl release page^] and download the latest
+stable release. Extract the archive and add the directory with the extracted files to your
+path.
+ 
+To create your cluster, use the `eksctl create cluster` command.
+
+[role=command]
+```
+eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
+```
+
+This will create a cluster called `guide-cluster` that uses a single `t2.small` Amazon
+Elastic Compute Cloud (EC2) instance as the worker node. When the cluster is finished 
+creating, you should see an output similar to the following.
+
+[source, role="no_copy"]
+```
+[✔]  EKS cluster "guide-cluster" in "us-east-2" region is ready
+```
 
 
+Once your cluster is ready, connect `kubectl` to the cluster.
 
-///////////////////////////
-// Getting started
-///////////////////////////
-
-// Add this getting started section to your guide if it is applicable.
-// Use the following include to pull in the git clone instructions from the guides-common repo.
-
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/gitclone.adoc[]
-// This include adoc will have the heading "Getting started".
-// If you are not using this command include statement, you'll need to add it as a subheading,
-// ie, "== Getting started".
+[role=command]
+```
+aws eks --region [region] update-kubeconfig --name guide-cluster
+```
 
 
+Verify that you're connected to the cluster by checking the cluster's nodes.
 
+[role=command]
+```
+kubectl get nodes
+```
 
-///////////////////////////
-// Try what you’ll build
-///////////////////////////
-
-// This is a subsection of the "Getting started" section above. It should briefly walk the user
-// through how to setup everything in the "finish" directory and try out the finished version of
-// what they will be building.
-
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/trywhatyoubuild-intro.adoc[]
-// This include adoc will have the subheading "Try what you'll build".
-// If you are not using this command include statement, you'll need to add it as a subheading,
-// ie, "=== Try what you'll build".
-
-// Brief explanation on how to use the finished application.
-// Describe what user expects to see after running the complete version of the application.
-
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/trywhatyoubuild-end.adoc[]
-
-
-
-
-== Section title for this section, starting with a gerund like Creating, Building, etc
-
-// Add the various sections that are needed for a particular guide.
-
-// Start each additional section title with a meaningful gerund such as Creating, Building, Testing.
-// Follow the gerund with a meaningful noun phrase. For example: Creating a JAX-RS application
-// Have as many sections and section titles as needed.
-// EXAMPLES:
-
-* Building a todo list model
-
-* Creating an application manager
-
-* Creating the JAX-RS Resource
-
-
-// Write a sentence with the context like "Navigate to the `start` directory to begin." in the section
-// where user starts working with the implementation.
-
-
-// What to add for each section:
-// Start each section with a meaningful description about what the user is doing in the section.
-// Include code snippets.
-// Avoid making all the documentation a series of steps and tasks, bullets, or numbered lists.
-// Use tick marks around directories, files, values, class names, method names, and so on.
-// Example: `this-is-a-file`, `this/is/a/path`, `thisIsAMethod`.
-
-
-
-// EXAMPLE: The following block demonstrates how different sections look like for a todo application.
-// ======================================================================================================
-== EXAMPLE: Building a todo list model
-
-* Navigate to the `start` directory
-* Represent an entry in a todo list
-
-[role="code_command hotspot", subs="quotes"]
+[source, role="no_copy"]
 ----
-#Create the `TodoModel` class.#
-`src/main/java/io/openliberty/guides/todolistSample/models/TodoModel.java`
-----
-
-TodoModel.java
-[source, Java, linenums, indent=0, role="code_column"]
-----
-link:finish/src/main/java/io/openliberty/guides/todolistSample/models/TodoModel.java[]
-----
-
-* Getters, setters, and default constructor such that the model can be serialized/deserialized easily
-
-== EXAMPLE: Creating an application manager
-
-* Create a manager that is injected into the JAX-RS resource
-
-[role="code_command hotspot file=0", subs="quotes"]
-----
-#Create the `TodoManager` interface.#
-`src/main/java/io/openliberty/guides/todo/managers/TodoManager.java`
+NAME           STATUS    ROLES     AGE       VERSION
+10.70.200.73   Ready     <none>    1h        v1.10.11-eks
 ----
 
-TodoManager.java
-[source, Java, linenums, indent=0, role="code_column"]
+// =================================================================================================
+// Building and containerizing the microservices
+// =================================================================================================
+
+=== Building and containerizing the microservices
+
+The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
+
+The starting Java project, which you can find in the `start` directory, is a multi-module Maven
+project. It's made up of the `name` and `ping` microservices. Each microservice resides in its own directory,
+`start/name` and `start/ping`. Each of these directories also contains a Dockerfile, which is necessary
+for building Docker images. If you're unfamiliar with Dockerfiles, check out the
+https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide.
+It covers Dockerfiles in depth.
+
+If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
+use the `.war` file to build a Docker image. We've setup the projects such that this process is automated
+as a part of a single Maven build. It's created by using the `dockerfile-maven` plug-in. The plug-in automatically
+picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
+If you're using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This configuration is required by the `dockerfile-maven` part of the build.
+
+Navigate to the `start` directory and run the following command:
+
+[role=command]
+```
+mvn package
+```
+
+The `package` goal automatically starts the `dockerfile-maven:build` goal. It runs during the
+`package` phase. This goal builds a Docker image from the Dockerfile located in the same directory
+as the POM file.
+
+During the build, you'll see various Docker messages describing what images are being downloaded and
+built. When the build finishes, run the following command to list all local Docker images:
+
+[role=command]
+```
+docker images
+```
+
+Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them, for example:
+
+[source, role="no_copy"]
 ----
-link:finish/src/main/java/io/openliberty/guides/todolistSample/managers/TodoManager.java[]
-----
-
-* Next, create the sample todo manager class
-
-[role="code_command hotspot file=1", subs="quotes"]
-----
-#Create the `SampleTodoManager` class.#
-`src/main/java/io/openliberty/guides/todolistSample/managers/samples/SampleTodoManager.java`
-----
-
-SampleTodoManager.java
-[source, Java, linenums, indent=0, role="code_column"]
-----
-link:finish/src/main/java/io/openliberty/guides/todolistSample/managers/samples/SampleTodoManager.java[]
-----
-
-* Implemented basic CRUD ([hotspot=32-36 file=1]`Create`, [hotspot=39-44 file=1]`Read`,
-[hotspot=47-57 file=1]`Update`, and [hotspot=60-68 file=1]`Delete`) operations.
-* Manager is [hotspot=14 file=1]`ApplicationScoped`, which essentially means that it is a singleton.
-
-== EXAMPLE: Creating the JAX-RS resource
-
-* Description of the technology, possibly with a link to learn more.
-* Use CDI to inject the todo manager into the resource
-
-[role="code_command hotspot", subs="quotes"]
-----
-#Create the `TodoResource` class.#
-`src/main/java/io/openliberty/guides/todolistSample/resources/TodoResource.java`
-----
-
-TodoResource.java
-[source, Java, linenums, indent=0, role="code_column"]
-----
-link:finish/src/main/java/io/openliberty/guides/todolistSample/resources/TodoResource.java[]
-----
-
-* The resource methods are accessible via HTTP
-* Use [hotspot=27-43]`GET`, [hotspot=45-54]`POST`, [hotspot=56-71]`PUT`,
-and [hotspot=73-83]`DELETE` verbs to handle reading, creating, updating,
-and deleting resources
-* Validate data models and send appropriate response accordingly
-// ======================================================================================================
-
-
-
-
-//////////////////////////////////////////
-// Building and running the application
-//////////////////////////////////////////
-
-// Use the following include to pull in the Maven build instructions from the guides-common repo.
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/mvnbuild.adoc[]
-// This include adoc will have the subheading "Building and running the application".
-// If you are not using this command include statement, you'll need to add it as a subheading,
-// ie, "== Building and running the application".
-
-// In between here, you should state where you application can be found now that its running. ie. urls
-// Sample usage of the application
-// Suggestions for what changes the reader can make to explore the code
-
-// Use the following include to pull in the Maven rebuild instructions from the
-// guides-common repo.
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/mvncompile.adoc[]
-
-
-
-
-== Testing the application
-
-// Show how to test your application.
-
-// EXAMPLE:
-// ======================================================================================================
-
-[role="code_command hotspot", subs="quotes"]
-----
-#Create the `TodoTest` class.#
-`finish/src/test/java/it/io/openliberty/guides/todo/TodoTest.java`
+REPOSITORY               TAG
+ping                     1.0-SNAPSHOT
+name                     1.0-SNAPSHOT
+open-liberty             latest
 ----
 
-TodoTest.java
-[source, Java, linenums, indent=0, role="code_column"]
+If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images, then check the Maven
+build log for any potential errors.
+
+// =================================================================================================
+// Pushing the images to a docker registry
+// =================================================================================================
+
+=== Pushing the images to a Docker registry
+
+Pushing the images a registry will allow the cluster to create pods using your Docker images. 
+The registry you will use is called Amazon Elastic Container Registry (ECR).
+
+Start by making a repository for the name and ping image, respectively.
+[role=command]
+```
+aws ecr create-repository --repository-name awsguide/name
+aws ecr create-repository --repository-name awsguide/ping
+```
+
+Run the following command to verify that the repositories were created. Take note of the
+repository URI's as you will need them when tagging and pushign your images.
+
+[role=command]
+```
+aws ecr describe-repositories
+```
+
+// Tagging images
+Next, you need to tag your Docker images with the relevant data about your registry. 
+
+[role=command]
+```
+docker tag name:1.0-SNAPSHOT [repository-uri]:1.0-SNAPSHOT
+docker tag ping:1.0-SNAPSHOT [repository-uri]:1.0-SNAPSHOT
+```
+
+// Pushing images
+Finally, push your images to the registry.
+
+[role=command]
+```
+docker push [repository-uri]:1.0-SNAPSHOT
+docker push [repository-uri]:1.0-SNAPSHOT
+```
+
+When tagging and pushing your images, remeber to subtitute `[repository-uri]` with the 
+appropriate URI for the name and ping repositories. 
+
+// =================================================================================================
+// Deploying the microservices
+// =================================================================================================
+
+=== Deploying the microservices
+
+https://helm.sh/[Helm^] is a package manager for {kube}. It allows you to create a package called a chart. You can install a chart on your cluster as a release and then manage the release using Helm.
+
+// Setup Tiller for IKS
+Set up Role Based Access Control (RBAC) to give Helm's Tiller server admin access to your cluster. Deploy the service account and cluster role binding required for the Tiller.
+
+[role=command]
+```
+kubectl apply -f https://raw.githubusercontent.com/IBM-Cloud/kube-samples/master/rbac/serviceaccount-tiller.yaml
+```
+
+[source, role="no_copy"]
 ----
-link:finish/src/test/java/it/io/openliberty/guides/todolistSample/TodoTest.java[]
+serviceaccount/tiller created
+clusterrolebinding.rbac.authorization.k8s.io/tiller created
 ----
 
-* Explain what each [hotspot=13-20]`@Test` test case is testing
-* Explain key methods
-// ======================================================================================================
+Next, install Tiller to your cluster. Specify that the Tiller should run under the service account that was created in the previous step.
 
-// Include this for info on how to run the tests
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/mvnverify.adoc[]
+[role=command]
+```
+helm init --service-account tiller
+```
 
-// Including a listing block with test results here
-// Show console output of the test results
+After the command completes, you will see output similar to the following.
 
-// OPTIONAL: after listing the test results, mention a simple change a user can make/introduce that
-// will cause the tests to fail. Be brief and don't give the users all of the instructions.
-// At this point, they should be comfortable enough to figure it out on their own.
+[source, role="no_copy"]
+----
+$HELM_HOME has been configured at /Users/OpenLiberty/.helm.
+
+Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
+
+Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
+To prevent this, run `helm init` with the --tiller-tls-verify flag.
+For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
+Happy Helming!
+----
+
+All pods run under a service account. By default, your pod will run under the `default` service account for your namespace. Helm's Tiller server is running under the `tiller` service account. The `tiller` service account is bound to the cluster role `cluster-admin`. This role grants access to all resources in your cluster. Therefore, the Tiller server has access to all of your cluster's resources.
+
+// =================================================================================================
+// Testing microservices that are running on IBM Cloud
+// =================================================================================================
+
+== Testing microservices that are running on IBM Cloud
+
+A few tests are included for you to test the basic functionality of the microservices. If a test failure
+occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
+in the ready state before proceeding further. The default properties defined in the `pom.xml` are:
+
+[cols="15, 100", options="header"]
+|===
+| *Property*        | *Description*
+| cluster.ip        | IP or hostname for your cluster
+| name.kube.service | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
+| name.node.port    | The NodePort of the {kube} Service `name-service`, 31000 by default.
+| ping.node.port    | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+|===
+
+Navigate back to the `start` directory.
+
+Use the following command to run the integration tests against your cluster. Subtitute `[ip-address]`, `[name-node-port]` and `[ping-node-port]` with the appropriate values.
+
+[role=command]
+```
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=[ip-address] -Dname.node.port=[name-node-port] -Dping.node.port=[ping-node-port] -Dname.kube.service=name-app-ibm-open-libert
+```
+
+The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
+
+If the tests pass, you'll see an output similar to the following for each service respectively:
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.name.NameEndpointTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.name.NameEndpointTest
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+----
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.ping.PingEndpointTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.ping.PingEndpointTest
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+----
+
+=== Deploying new version of name microservice
+
+Optionally, you may want to learn how to re-deploy a microservice. You can re-deploy a microservice using Helm to upgrade the release.
+
+Use the following Maven command to bump the version of the microservice to 2.0-SNAPSHOT.
+
+[role=command]
+```
+mvn versions:set -DnewVersion=2.0-SNAPSHOT
+```
+
+Use Maven to package your microservice.
+
+[role=command]
+```
+mvn package
+```
+
+Since you built a new image, it will have to be pushed to the repository again.
+
+// Tagging images
+Tag your Docker image with the relevant data about your registry.
+
+[role=command]
+```
+docker tag name:2.0-SNAPSHOT [repository-uri]:2.0-SNAPSHOT
+```
+
+// Pushing images
+Push your image to the registry.
+
+[role=command]
+```
+docker push [repository-uri]:2.0-SNAPSHOT
+```
+
+Use Helm to re-deploy the `name` microservice.
+
+Use the following command to find the name of the pod running the `name` microservice.
+
+[role=command]
+```
+kubectl get pods
+```
+
+[source, role="no_copy"]
+----
+NAME                                        READY     STATUS    RESTARTS   AGE
+name-app-ibm-open-libert-7f78456848-pp46r   1/1       Running   0          6m
+ping-app-ibm-open-libert-6fd6b9dc4-942s2    1/1       Running   0          20m
+----
+
+Observe that in this case the `name` microservice is running in the pod called `name-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the following command to see more details about the pod.
+
+[role=command]
+```
+kubectl describe pod [pod-name]
+```
+
+View the events at the bottom of the command's output. Observe that the pod is using the new Docker image `name:2.0-SNAPSHOT`.
+
+[source, role="no_copy"]
+----
+Events:
+  Type     Reason                 Age   From                         Message
+  ----     ------                 ----  ----                         -------
+  Normal   Scheduled              10m   default-scheduler            Successfully assigned name-app-ibm-open-libert-7f78456848-pp46r to docker-for-desktop
+  Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "default-token-d89tg"
+  Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "liberty-overrides"
+  Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "liberty-config"
+  Normal   Pulled                 10m   kubelet, docker-for-desktop  Container image "name:2.0-SNAPSHOT" already present on machine
+  Normal   Created                10m   kubelet, docker-for-desktop  Created container
+  Normal   Started                10m   kubelet, docker-for-desktop  Started container
+----
+
+// =================================================================================================
+// Tear Down
+// =================================================================================================
+
+== Tearing down the environment
+
+When you no longer need your deployed microservices, you can delete them with the following Helm commands:
+
+[role=command]
+```
+helm delete --purge name-app
+helm delete --purge ping-app
+```
+
+Uninstall Tiller from your cluster by running the following Helm command.
+
+[role=command]
+```
+helm reset
+```
+
+Remove your EKS cluster.
+
+[role=command]
+```
+eksctl delete cluster --name guide-cluster
+```
 
 
-
+// =================================================================================================
+// finish
+// =================================================================================================
 
 == Great work! You're done!
 
-// Briefly summarize what the user achieved in this guide (1-2 sentences).
-EXAMPLE: You have just completed building a simple todo list application using JAXRS and CDI services in Open Liberty.
+You have just deployed two microservices to AWS EKS. You have learned to use Helm to install your microservices
+on a {kube} cluster using the Open Liberty helm chart.
 
-// OPTIONAL: briefly state what the user could do next now that they've learned the
-// technologies in this guide.
-
-// Include the below from the guides-common repo to tell users how they can contribute to the guide
- include::{common-includes}/attribution.adoc[subs="attributes"]
+// Multipane
+include::{common-includes}/attribution.adoc[subs="attributes"]
 
 // DO NO CREATE ANYMORE SECTIONS AT THIS POINT
 // Related guides will be added in automatically here if you included them in ":page-related-guides"
