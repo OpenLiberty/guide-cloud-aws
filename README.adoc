@@ -9,7 +9,7 @@
 //
 :projectid: cloud-aws
 :page-layout: guide
-:page-duration: 4 hours
+:page-duration: 45 minutes
 :page-releasedate: 2019-04-01
 :page-description: Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes and manage your cluster.
 :page-tags: ['Kubernetes', 'Docker']
@@ -240,7 +240,14 @@ build log for any potential errors.
 Pushing the images a registry will allow the cluster to create pods using your Docker images. 
 The registry you will use is called Amazon Elastic Container Registry (ECR).
 
-Start by making a repository for the name and ping image, respectively.
+First, we must authenticate your Docker client to your ECR registry by running the `get-login`
+command and then running the `docker login` command that is returned.
+[role=command]
+```
+aws ecr get-login --no-include-email
+```
+
+Next, make a repository to store the name and ping images, respectively.
 [role=command]
 ```
 aws ecr create-repository --repository-name awsguide/name
@@ -248,7 +255,7 @@ aws ecr create-repository --repository-name awsguide/ping
 ```
 
 Run the following command to verify that the repositories were created. Take note of the
-repository URI's as you will need them when tagging and pushign your images.
+repository URI's as you will need them when tagging and pushing your images.
 
 [role=command]
 ```
