@@ -76,7 +76,10 @@ public class PingEndpointTest {
         response = this.getResponse(clusterUrl + invalidServiceName);
         this.assertResponse(clusterUrl, response);
         
-        String expected = "Bad response from " + invalidServiceName + "\nCheck the console log for more info.";
+        String expected = "Bad response from ";
+        expected = expected + invalidServiceName;
+        expected = expected + "\nCheck the console log for more info.";
+
         String actual = response.readEntity(String.class);
         assertEquals(
             "Should have received a bad response from "
@@ -112,7 +115,10 @@ public class PingEndpointTest {
      *          - response received from the target URL.
      */
     private void assertResponse(String url, Response response) {
-        assertEquals("Incorrect response code from " + url, 200, response.getStatus());
+        assertEquals(
+            "Incorrect response code from " + url,
+            200,
+            response.getStatus());
     }
 
 }

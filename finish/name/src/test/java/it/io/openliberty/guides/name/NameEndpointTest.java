@@ -66,8 +66,12 @@ public class NameEndpointTest {
         
         String containerName = greeting.substring(greeting.lastIndexOf(" ") + 1);
         containerName = (containerName.equals("null")) ? null : containerName;
+
+        String desc = "Container name should not be null but it was.";
+        desc += " The service is probably not running inside a container";
+
         assertNotNull(
-            "Container name should not be null but it was. The service is probably not running inside a container",
+            desc,
             containerName);
     }
 
@@ -95,7 +99,10 @@ public class NameEndpointTest {
      *          - response received from the target URL.
      */
     private void assertResponse(String url, Response response) {
-        assertEquals("Incorrect response code from " + url, 200, response.getStatus());
+        assertEquals(
+            "Incorrect response code from " + url,
+            200,
+            response.getStatus());
     }
 
 }

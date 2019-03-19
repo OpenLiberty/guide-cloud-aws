@@ -5,7 +5,11 @@
     <feature>cdi-2.0</feature>
   </featureManager>
 
-  <httpEndpoint host="*" httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
+  <httpEndpoint
+    host="*"
+    httpPort="${default.http.port}"
+    httpsPort="${default.https.port}"
+    id="defaultHttpEndpoint"/>
 
   <webApplication location="name.war" contextRoot="api"/>
 </server>

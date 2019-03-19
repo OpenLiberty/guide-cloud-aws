@@ -49,7 +49,7 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
         </dependency>
-        <!-- Support for JDK 9 and above -->
+
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -91,8 +91,12 @@
                                     <arguments>
                                         <argument>set</argument>
                                         <argument>image</argument>
-                                        <argument>deployment/ol-${project.artifactId}-ibm-open-liberty</argument>
-                                        <argument>ibm-open-liberty=${project.artifactId}:${project.version}</argument>
+                                        <argument>
+                                            deployment/ol-${project.artifactId}-ibm-open-liberty
+                                        </argument>
+                                        <argument>
+                                            ibm-open-liberty=${project.artifactId}:${project.version}
+                                        </argument>
                                         <argument>--record</argument>
                                     </arguments>
                                 </configuration>
@@ -114,7 +118,14 @@
             <plugin>
                 <groupId>net.wasdev.wlp.maven.plugins</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
+                <version>2.3</version>
                 <configuration>
+                    <assemblyArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-runtime</artifactId>
+                        <version>${version.openliberty-runtime}</version>
+                        <type>zip</type>
+                    </assemblyArtifact>
                     <configFile>src/main/liberty/config/server.xml</configFile>
                     <include>usr</include>
                     <bootstrapProperties>
@@ -124,7 +135,18 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>install-apps</id>
+                        <id>create-default-server</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>create-server</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>install-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>install-apps</goal>
+                        </goals>
                         <configuration>
                             <appsDirectory>apps</appsDirectory>
                             <stripVersion>true</stripVersion>
@@ -134,8 +156,14 @@
                     </execution>
                     <execution>
                         <id>package-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package-server</goal>
+                        </goals>
                         <configuration>
-                            <packageFile>${project.build.directory}/defaultServer.zip</packageFile>
+                            <packageFile>
+                                ${project.build.directory}/defaultServer.zip
+                            </packageFile>
                         </configuration>
                     </execution>
                 </executions>
