@@ -289,44 +289,63 @@ appropriate URI for the name and ping repositories.
 
 === Deploying the microservices
 
-https://helm.sh/[Helm^] is a package manager for {kube}. It allows you to create a package called a chart. You can install a chart on your cluster as a release and then manage the release using Helm.
+Now that your Docker images are built, deploy them using a Kubernetes resource definition.
 
-// Setup Tiller for IKS
-Set up Role Based Access Control (RBAC) to give Helm's Tiller server admin access to your cluster. Deploy the service account and cluster role binding required for the Tiller.
+A Kubernetes resource definition is a yaml file that contains a description of all your 
+deployments, services, or any other resources that you want to deploy. All resources can 
+also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
-[role=command]
+[role="code_command hotspot", subs="quotes"]
+----
+#Create the Kubernetes configuration file.#
+`kubernetes.yaml`
+----
+
+kubernetes.yaml
+[source, yaml, linenums, role="code_column"]
+----
+include::finish/kubernetes.yaml[tags=**;]
+----
+
+This file defines four {kube} resources. It defines two deployments and two services. 
+A {kube} deployment is a resource responsible for controlling the creation and management 
+of pods. A service exposes your deployment so that you can make requests to your containers. 
+Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, 
+[hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The 
+[hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific 
+deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image 
+that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` 
+is the port that your container exposes for purposes of accessing your application.
+
+For the services, the key point to understand is that they expose your deployments. 
+The binding between deployments and services is specified by the use of labels -- in this 
+case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` 
+label. You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`. 
+This means you can access these services from outside of your cluster via a specific port. 
+In this case, the ports will be `31000` and `32000`, but it can also be randomized if the 
+[hotspot=55 hotspot=69]`nodePort` field is not used.
+
+Run the following commands to deploy the resources as defined in kubernetes.yaml:
+[role='command']
 ```
-kubectl apply -f https://raw.githubusercontent.com/IBM-Cloud/kube-samples/master/rbac/serviceaccount-tiller.yaml
+kubectl apply -f kubernetes.yaml
 ```
+
+When the apps are deployed, run the following command to check the status of your pods:
+[role='command']
+```
+kubectl get pods
+```
+
+You'll see an output similar to the following if all the pods are healthy and running:
 
 [source, role="no_copy"]
 ----
-serviceaccount/tiller created
-clusterrolebinding.rbac.authorization.k8s.io/tiller created
+NAME                               READY     STATUS    RESTARTS   AGE
+name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          15s
+ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
-Next, install Tiller to your cluster. Specify that the Tiller should run under the service account that was created in the previous step.
-
-[role=command]
-```
-helm init --service-account tiller
-```
-
-After the command completes, you will see output similar to the following.
-
-[source, role="no_copy"]
-----
-$HELM_HOME has been configured at /Users/OpenLiberty/.helm.
-
-Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
-
-Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
-To prevent this, run `helm init` with the --tiller-tls-verify flag.
-For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
-Happy Helming!
-----
-
-All pods run under a service account. By default, your pod will run under the `default` service account for your namespace. Helm's Tiller server is running under the `tiller` service account. The `tiller` service account is bound to the cluster role `cluster-admin`. This role grants access to all resources in your cluster. Therefore, the Tiller server has access to all of your cluster's resources.
 
 // =================================================================================================
 // Testing microservices that are running on IBM Cloud
@@ -349,7 +368,8 @@ in the ready state before proceeding further. The default properties defined in 
 
 Navigate back to the `start` directory.
 
-Use the following command to run the integration tests against your cluster. Subtitute `[ip-address]`, `[name-node-port]` and `[ping-node-port]` with the appropriate values.
+Use the following command to run the integration tests against your cluster. Subtitute 
+`[ip-address]`, `[name-node-port]` and `[ping-node-port]` with the appropriate values.
 
 [role=command]
 ```
