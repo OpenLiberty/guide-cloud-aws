@@ -56,15 +56,11 @@ you to more easily scale your microservices and serve them in a high-availabilit
 == What you'll learn
 
 You will learn how to deploy two microservices in Open Liberty containers to a {kube}
-cluster on Amazon Elastic Container Service for Kubernetes (EKS). You will use `helm` to 
-deploy these microservices using Open Liberty Helm charts. Helm is a package manager for 
-{kube}. It uses templates to generate {kube} yaml files and then deploys and manages them 
-as releases to your cluster.
-
-Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon EKS. EKS simplifies
-the process of running Kubernetes on AWS without needing to install or maintain your own
-Kubernetes control plane. It provides a hosted {kube} cluster that you may deploy your 
-microservices to. You will use it in conjunction with Amazon Elastic Container Registry (ECR).
+cluster on Amazon Elastic Container Service for Kubernetes (EKS). Amazon Web Services (AWS) 
+offers a managed Kubernetes service called Amazon EKS. EKS simplifies the process of running 
+Kubernetes on AWS without needing to install or maintain your own Kubernetes control plane. 
+It provides a hosted {kube} cluster that you may deploy your microservices to. You will 
+use it in conjunction with Amazon Elastic Container Registry (ECR).
 
 The two microservices you'll deploy are called `name` and `ping`. The `name` microservice
 displays a brief greeting and the name of the container it's running in. This message 
@@ -442,7 +438,13 @@ Push your image to the registry.
 docker push [repository-uri]:2.0-SNAPSHOT
 ```
 
-Use Helm to re-deploy the `name` microservice.
+Re-deploy the `name` microservice by updating the container image to `name:2.0-SNAPSHOT`
+in the `kubernetes.yaml` file and running the following command to deploy the resources 
+as defined in kubernetes.yaml:
+[role='command']
+```
+kubectl apply -f kubernetes.yaml
+```
 
 Use the following command to find the name of the pod running the `name` microservice.
 
@@ -458,14 +460,17 @@ name-app-ibm-open-libert-7f78456848-pp46r   1/1       Running   0          6m
 ping-app-ibm-open-libert-6fd6b9dc4-942s2    1/1       Running   0          20m
 ----
 
-Observe that in this case the `name` microservice is running in the pod called `name-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the following command to see more details about the pod.
+Observe that in this case the `name` microservice is running in the pod called 
+`name-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the 
+following command to see more details about the pod.
 
 [role=command]
 ```
 kubectl describe pod [pod-name]
 ```
 
-View the events at the bottom of the command's output. Observe that the pod is using the new Docker image `name:2.0-SNAPSHOT`.
+View the events at the bottom of the command's output. Observe that the pod is using the 
+new Docker image `name:2.0-SNAPSHOT`.
 
 [source, role="no_copy"]
 ----
@@ -487,19 +492,11 @@ Events:
 
 == Tearing down the environment
 
-When you no longer need your deployed microservices, you can delete them with the following Helm commands:
-
-[role=command]
+When you no longer need your deployed microservices, you can delete all {kube} resources 
+by running the `kubectl delete` command:
+[role='command']
 ```
-helm delete --purge name-app
-helm delete --purge ping-app
-```
-
-Uninstall Tiller from your cluster by running the following Helm command.
-
-[role=command]
-```
-helm reset
+kubectl delete -f kubernetes.yaml
 ```
 
 Remove your EKS cluster.
@@ -516,8 +513,8 @@ eksctl delete cluster --name guide-cluster
 
 == Great work! You're done!
 
-You have just deployed two microservices to AWS EKS. You have learned to use Helm to install your microservices
-on a {kube} cluster using the Open Liberty helm chart.
+You have just deployed two microservices running in Open Liberty to AWS EKS. You have 
+learned how to use `kubectl` to deploy your microservices on a {kube} cluster.
 
 // Multipane
 include::{common-includes}/attribution.adoc[subs="attributes"]
