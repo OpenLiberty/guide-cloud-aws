@@ -318,10 +318,10 @@ ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 
 
 // =================================================================================================
-// Testing microservices that are running on IBM Cloud
+// Testing microservices that are running on AWS EKS
 // =================================================================================================
 
-== Testing microservices that are running on IBM Cloud
+== Testing microservices that are running on AWS EKS
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
