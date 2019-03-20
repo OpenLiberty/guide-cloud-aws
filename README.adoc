@@ -162,8 +162,8 @@ kubectl get nodes
 
 [source, role="no_copy"]
 ----
-NAME           STATUS    ROLES     AGE       VERSION
-10.70.200.73   Ready     <none>    1h        v1.10.11-eks
+NAME                            STATUS    ROLES     AGE       VERSION
+ip.us-east-2.compute.internal   Ready     <none>    7m        v1.11.5
 ----
 
 // =================================================================================================
@@ -242,8 +242,23 @@ aws ecr create-repository --repository-name awsguide/name
 aws ecr create-repository --repository-name awsguide/ping
 ```
 
-Run the following command to verify that the repositories were created. Take note of the
-repository URI's as you will need them when tagging and pushing your images.
+You should see an output similar to the following.
+
+[source, role="no_copy"]
+```
+{
+    "repository": {
+        "registryId": "12345",
+        "repositoryName": "awsguide/name",
+        "repositoryArn": "arn:aws:ecr:us-east-2:12345:repository/awsguide/name",
+        "createdAt": 1553111916.0,
+        "repositoryUri": "12345.ecr.us-east-2.amazonaws.com/awsguide/name"
+    }
+}
+```
+
+Take note of the repository URI for both the name and ping respository as you will need 
+them when tagging and pushing your images.
 
 [role=command]
 ```
@@ -255,8 +270,8 @@ Next, you need to tag your Docker images with the relevant data about your regis
 
 [role=command]
 ```
-docker tag name:1.0-SNAPSHOT [repository-uri]:1.0-SNAPSHOT
-docker tag ping:1.0-SNAPSHOT [repository-uri]:1.0-SNAPSHOT
+docker tag name:1.0-SNAPSHOT [name-repository-uri]:1.0-SNAPSHOT
+docker tag ping:1.0-SNAPSHOT [ping-repository-uri]:1.0-SNAPSHOT
 ```
 
 // Pushing images
@@ -264,12 +279,12 @@ Finally, push your images to the registry.
 
 [role=command]
 ```
-docker push [repository-uri]:1.0-SNAPSHOT
-docker push [repository-uri]:1.0-SNAPSHOT
+docker push [name-repository-uri]:1.0-SNAPSHOT
+docker push [ping-repository-uri]:1.0-SNAPSHOT
 ```
 
-When tagging and pushing your images, remeber to subtitute `[repository-uri]` with the 
-appropriate URI for the name and ping repositories. 
+When tagging and pushing your images, remeber to subtitute `[name-repository-uri]` and 
+`[ping-repository-uri]` with the appropriate URI for the name and ping repositories. 
 
 // =================================================================================================
 // Deploying the microservices
@@ -308,6 +323,35 @@ name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          15s
 ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
+=== Making requests to the microservices
+
+Take note of the `EXTERNAL-IP` in the output of the following command.
+[role=command]
+```
+kubectl get nodes -o wide
+```
+
+Before we can make a request to `EXTERNAL-IP:31000` or `EXTERNAL-IP:32000`, we must modify
+the security group to allow incoming traffic through ports 31000 and 32000. 
+[role=command]
+```
+aws ec2 authorize-security-group-ingress --protocol tcp --port 31000 --group-id [security-group-id] --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id [security-group-id] --cidr 0.0.0.0/0
+```
+
+Make a request to the `name` microservice substituting in `ip-address` where appropriate.
+
+[role=command]
+```
+curl http://[ip-address]:31000/api/name
+```
+
+Make a request to the `ping` microservice substituting in `ip-address` where appropriate.
+
+[role=command]
+```
+curl http://[ip-address]:32000/api/ping/name-service
+```
 
 // =================================================================================================
 // Testing microservices that are running on AWS EKS
@@ -335,7 +379,7 @@ Use the following command to run the integration tests against your cluster. Sub
 
 [role=command]
 ```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=[ip-address] -Dname.node.port=[name-node-port] -Dping.node.port=[ping-node-port] -Dname.kube.service=name-app-ibm-open-libert
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=[ip-address]
 ```
 
 The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
@@ -370,7 +414,7 @@ Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 
 === Deploying new version of name microservice
 
-Optionally, you may want to learn how to re-deploy a microservice. You can re-deploy a microservice using Helm to upgrade the release.
+Optionally, you may want to learn how to re-deploy a microservice. 
 
 Use the following Maven command to bump the version of the microservice to 2.0-SNAPSHOT.
 
@@ -393,7 +437,7 @@ Tag your Docker image with the relevant data about your registry.
 
 [role=command]
 ```
-docker tag name:2.0-SNAPSHOT [repository-uri]:2.0-SNAPSHOT
+docker tag name:2.0-SNAPSHOT [name-repository-uri]:2.0-SNAPSHOT
 ```
 
 // Pushing images
@@ -401,15 +445,14 @@ Push your image to the registry.
 
 [role=command]
 ```
-docker push [repository-uri]:2.0-SNAPSHOT
+docker push [name-repository-uri]:2.0-SNAPSHOT
 ```
 
-Re-deploy the `name` microservice by updating the container image to `name:2.0-SNAPSHOT`
-in the `kubernetes.yaml` file and running the following command to deploy the resources 
-as defined in kubernetes.yaml:
+Update the `name-deployment` deployment to use the new container image that we just
+pushed to the registry.
 [role='command']
 ```
-kubectl apply -f kubernetes.yaml
+kubectl set image deployment/name-deployment name-container=[name-repository-uri]:2.0-SNAPSHOT
 ```
 
 Use the following command to find the name of the pod running the `name` microservice.

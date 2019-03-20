@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: name-container
-        image: name:1.0-SNAPSHOT
+        image: [name-repository-uri]:1.0-SNAPSHOT 
         ports:
         - containerPort: 9080
 ---
@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: ping-container
-        image: ping:1.0-SNAPSHOT
+        image: [ping-repository-uri]:1.0-SNAPSHOT
         ports:
         - containerPort: 9080
 ---
