@@ -152,15 +152,7 @@ creating, you should see an output similar to the following.
 [✔]  EKS cluster "guide-cluster" in "us-east-2" region is ready
 ```
 
-
-Once your cluster is ready, connect `kubectl` to the cluster.
-
-[role=command]
-```
-aws eks --region [region] update-kubeconfig --name guide-cluster
-```
-
-
+Once your cluster is ready, EKS will connect `kubectl` to the cluster.
 Verify that you're connected to the cluster by checking the cluster's nodes.
 
 [role=command]
