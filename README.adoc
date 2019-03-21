@@ -8,7 +8,7 @@
 //     IBM Corporation
 //
 :projectid: cloud-aws
-:page-layout: guide
+:page-layout: guide-multipane
 :page-duration: 45 minutes
 :page-releasedate: 2019-04-01
 :page-description: Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes and manage your cluster.
