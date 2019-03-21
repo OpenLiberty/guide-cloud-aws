@@ -348,12 +348,24 @@ kubectl get nodes -o wide
 ```
 
 Before we can make a request to `EXTERNAL-IP:31000` or `EXTERNAL-IP:32000`, we must modify
-the security group to allow incoming traffic through ports 31000 and 32000. 
+the security group to allow incoming traffic through ports `31000` and `32000`. To get the 
+`group-id` of the security group, use the `aws ec2 describe-security-groups` command.
+[role=command]
+```
+aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-nodegroup*"  --query "SecurityGroups[*].{Name:GroupName,ID:GroupId}"
+```
+
+Then, add the following rules to the security group to allow incoming traffic through ports
+`31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `ID` in the
+output of the previous command.
 [role=command]
 ```
 aws ec2 authorize-security-group-ingress --protocol tcp --port 31000 --group-id [security-group-id] --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id [security-group-id] --cidr 0.0.0.0/0
 ```
+
+After you are finished adding the inbound rules to the security group, you may need to 
+wait a few minutes before trying to access the `name` and `ping` microservices.
 
 Make a request to the `name` microservice substituting in `ip-address` where appropriate.
 
