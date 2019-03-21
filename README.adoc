@@ -302,6 +302,22 @@ in learning more about the the Kubernetes resource definition, check out the
 https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
 guide.
 
+[role="code_command hotspot", subs="quotes"]
+----
+#Update the `kubernetes.yaml` file.#
+`kubernetes.yaml`
+----
+finish/kubernetes.yaml
+[source, yaml, linenums, role='code_column']
+----
+include::finish/kubernetes.yaml[tags=**]
+----
+[role="edit_command_text"]
+The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want 
+to use for the container. Update the [hotspot=18 hotspot=39]`image` fields to point to 
+your `name` and `ping` repository URI, respectively.
+
+
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
 ```
