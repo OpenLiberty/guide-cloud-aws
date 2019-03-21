@@ -409,7 +409,7 @@ in the ready state before proceeding further. The default properties defined in 
 Navigate back to the `start` directory.
 
 Use the following command to run the integration tests against your cluster. Subtitute 
-`[ip-address]`, `[name-node-port]` and `[ping-node-port]` with the appropriate values.
+`[ip-address]` with the appropriate value.
 
 [role=command]
 ```
@@ -465,7 +465,8 @@ Use Maven to package your microservice.
 mvn package
 ```
 
-Since you built a new image, it will have to be pushed to the repository again.
+Since you built a new image, it will have to be pushed to the `awsguide/name` repository
+of your container registry again.
 
 // Tagging images
 Tag your Docker image with the relevant data about your registry.
