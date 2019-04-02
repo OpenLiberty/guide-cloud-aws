@@ -9,6 +9,10 @@
 printf "\nmvn -q package\n"
 mvn -q package
 
+printf "\replacing containers in kubernetes.yaml\n"
+sed -i 's/\[name-repository-uri\]/name/g' kubernetes.yaml
+sed -i 's/\[ping-repository-uri\]/ping/g' kubernetes.yaml
+
 printf "\nkubectl apply -f kubernetes.yaml\n"
 kubectl apply -f kubernetes.yaml
 

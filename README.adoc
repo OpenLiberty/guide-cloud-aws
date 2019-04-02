@@ -287,11 +287,6 @@ You should see an output similar to the following.
 Take note of the repository URI for both the name and ping respository as you will need 
 them when tagging and pushing your images.
 
-[role=command]
-```
-aws ecr describe-repositories
-```
-
 // Tagging images
 Next, you need to tag your Docker images with the relevant data about your registry. 
 
