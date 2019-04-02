@@ -387,7 +387,7 @@ aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide
 Then, add the following rules to the security group to allow incoming traffic through ports
 `31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `ID` in the
 output of the previous command.
-[role=command]
+[source, role="no_copy"]
 ```
 aws ec2 authorize-security-group-ingress --protocol tcp --port 31000 --group-id [security-group-id] --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id [security-group-id] --cidr 0.0.0.0/0
@@ -398,14 +398,14 @@ wait a few minutes before trying to access the `name` and `ping` microservices.
 
 Make a request to the `name` microservice substituting in `ip-address`.
 
-[role=command]
+[source, role="no_copy"]
 ```
 curl http://[ip-address]:31000/api/name
 ```
 
 Make a request to the `ping` microservice substituting in `ip-address`.
 
-[role=command]
+[source, role="no_copy"]
 ```
 curl http://[ip-address]:32000/api/ping/name-service
 ```
@@ -438,7 +438,7 @@ in the ready state before proceeding further. The default properties defined in 
 Use the following command to run the integration tests against your cluster. Subtitute 
 `[ip-address]` with the appropriate value.
 
-[role=command]
+[source, role="no_copy"]
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=[ip-address]
 ```
@@ -498,7 +498,7 @@ of your container registry again.
 // Tagging images
 Tag your Docker image with the relevant data about your registry.
 
-[role=command]
+[source, role="no_copy"]
 ```
 docker tag name:2.0-SNAPSHOT [name-repository-uri]:2.0-SNAPSHOT
 ```
@@ -506,14 +506,14 @@ docker tag name:2.0-SNAPSHOT [name-repository-uri]:2.0-SNAPSHOT
 // Pushing images
 Push your image to the registry.
 
-[role=command]
+[source, role="no_copy"]
 ```
 docker push [name-repository-uri]:2.0-SNAPSHOT
 ```
 
 Update the `name-deployment` deployment to use the new container image that we just
 pushed to the registry.
-[role='command']
+[source, role="no_copy"]
 ```
 kubectl set image deployment/name-deployment name-container=[name-repository-uri]:2.0-SNAPSHOT
 ```
@@ -536,7 +536,7 @@ Observe that in this case the `name` microservice is running in the pod called
 `name-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the 
 following command to see more details about the pod.
 
-[role=command]
+[source, role="no_copy"]
 ```
 kubectl describe pod [pod-name]
 ```
