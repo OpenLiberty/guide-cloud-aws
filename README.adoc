@@ -76,15 +76,15 @@ how communication can be established between pods inside a cluster.
 
 Before you begin, have the following tools installed:
 
-First, you will need a containerization software for building containers. Kubernetes 
+- First, you will need a containerization software for building containers. Kubernetes 
 supports a variety of container types. You will use Docker in this guide. For installation 
 instructions, refer to the official Docker documentation.
 
-Next, you will need the Kubernetes command-line tool `kubectl` to interact with your 
+- Next, you will need the Kubernetes command-line tool `kubectl` to interact with your 
 Kubernetes cluster. See the https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[official documentation^]
 for downloading and setting up `kubectl` on your platform.
 
-Throughout this guide you will need to use the AWS Command Line Interface (CLI). To install
+- Throughout this guide you will need to use the AWS Command Line Interface (CLI). To install
 the AWS CLI, you must have Python installed. See the https://www.python.org/downloads/[official documentation^] 
 for downloading the latest version of Python.
 
