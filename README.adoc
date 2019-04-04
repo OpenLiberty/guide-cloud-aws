@@ -131,6 +131,15 @@ After you are done filling out the various pieces of information, the settings w
 stored in the default profile. Anytime you run an AWS CLI command without specifying 
 a profile, the default profile will be used. 
 
+- To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
+IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
+instructions for installing on your platform. 
+
+- Lastly, in this guide we will use the `eksctl` CLI tool for provision your EKS cluster. 
+Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl release page^] and 
+download the latest stable release. Extract the archive and add the directory with the 
+extracted files to your path.
+
 // =================================================================================================
 // Getting Started
 // =================================================================================================
@@ -144,17 +153,9 @@ include::{common-includes}/gitclone.adoc[]
 
 === Provisioning a cluster
 
-To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
-IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
-instructions for installing on your platform. 
-
-In this guide, we will use `eksctl` to create the Kubernetes cluster on EKS. The `eksctl`
-CLI tool greatly simplifies the process of creating clusters on EKS. Navigate to the 
-https://github.com/weaveworks/eksctl/releases[eksctl release page^] and download the latest
-stable release. Extract the archive and add the directory with the extracted files to your
-path.
- 
-To create your cluster, use the `eksctl create cluster` command.
+In this guide, we use `eksctl` to create the Kubernetes cluster on EKS. The `eksctl`
+CLI tool greatly simplifies the process of creating clusters on EKS. To create your 
+cluster, use the `eksctl create cluster` command.
 
 [role=command]
 ```
