@@ -10,8 +10,8 @@ printf "\nmvn -q package\n"
 mvn -q package
 
 printf "\replacing containers in kubernetes.yaml\n"
-sed -i 's/\[name-repository-uri\]/name/g' kubernetes.yaml
-sed -i 's/\[ping-repository-uri\]/ping/g' kubernetes.yaml
+sed -i 's/\[inventory-repository-uri\]/inventory/g' kubernetes.yaml
+sed -i 's/\[system-repository-uri\]/system/g' kubernetes.yaml
 
 printf "\nkubectl apply -f kubernetes.yaml\n"
 kubectl apply -f kubernetes.yaml
@@ -25,17 +25,17 @@ kubectl get pods
 printf "\nminikube ip\n"
 echo `minikube ip`
 
-printf "\ncurl http://`minikube ip`:31000/api/name\n"
-curl http://`minikube ip`:31000/api/name
+printf "\ncurl http://`minikube ip`:31000/system/properties\n"
+curl http://`minikube ip`:31000/system/properties
 
-printf "\ncurl http://`minikube ip`:32000/api/ping/name-service\n"
-curl http://`minikube ip`:32000/api/ping/name-service
+printf "\ncurl http://`minikube ip`:32000/inventory/systems/name-service\n"
+curl http://`minikube ip`:32000/api/inventory/systems/name-service
 
 printf "\nmvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`\n"
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 
-printf "\nkubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)\n"
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
+printf "\nkubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)\n"
+kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 
-printf "\nkubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep ping)\n" 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep ping)
+printf "\nkubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)\n" 
+kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
