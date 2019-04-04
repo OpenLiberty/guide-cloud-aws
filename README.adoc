@@ -135,7 +135,7 @@ a profile, the default profile will be used.
 IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
 instructions for installing on your platform. 
 
-- Lastly, in this guide we will use the `eksctl` CLI tool for provision your EKS cluster. 
+- Lastly, in this guide we will use the `eksctl` CLI tool for provisioning your EKS cluster. 
 Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl release page^] and 
 download the latest stable release. Extract the archive and add the directory with the 
 extracted files to your path.
