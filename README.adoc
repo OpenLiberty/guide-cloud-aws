@@ -32,9 +32,8 @@ Explore how to push Docker images to a Amazon Elastic Container Registry and run
 :win: WINDOWS
 :mac: MAC
 :linux: LINUX
-:name-api: http://[hostname]:31000/api/name
-:ping-api: http://[hostname]:32000/api/ping
-
+:system-api: http://[hostname]:31000/system/properties
+:inventory-api: http://[hostname]:32000/inventory/systems
 
 // =================================================================================================
 // What is {kube}
@@ -62,11 +61,11 @@ Kubernetes on AWS without needing to install or maintain your own Kubernetes con
 It provides a hosted {kube} cluster that you may deploy your microservices to. You will 
 use it in conjunction with Amazon Elastic Container Registry (ECR).
 
-The two microservices you'll deploy are called `name` and `ping`. The `name` microservice
-displays a brief greeting and the name of the container it's running in. This message 
-makes it easy to differentiate it from its other replicas. The `ping` microservice
-pings the {kube} Service that encapsulates the `name` pods. This communication demonstrates
-how communication can be established between pods inside a cluster.
+The two microservices you will deploy are called system and inventory. The system microservice 
+simply returns the JVM systems properties of the container it is running in and it returns 
+the Pod’s name in the HTTP header making it easy to distinguish it from its other replicas. 
+The inventory microservice adds the properties from the system microservice to the inventory. 
+This demonstrates how communication can be established between pods inside a cluster.
 
 // =================================================================================================
 // Prerequisites
@@ -193,8 +192,8 @@ ip.us-east-2.compute.internal   Ready     <none>    7m        v1.11.5
 The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven
-project. It's made up of the `name` and `ping` microservices. Each microservice resides in its own directory,
-`start/name` and `start/ping`. Each of these directories also contains a Dockerfile, which is necessary
+project. It's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
+`start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary
 for building Docker images. If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide.
 It covers Dockerfiles in depth.
@@ -224,17 +223,17 @@ built. When the build finishes, run the following command to list all local Dock
 docker images
 ```
 
-Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them, for example:
+Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
 [source, role="no_copy"]
 ----
-REPOSITORY               TAG
-ping                     1.0-SNAPSHOT
-name                     1.0-SNAPSHOT
-open-liberty             latest
+REPOSITORY                    TAG
+system                        1.0-SNAPSHOT
+inventory                     1.0-SNAPSHOT
+open-liberty                  latest
 ----
 
-If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images, then check the Maven
+If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
 
 // =================================================================================================
@@ -265,8 +264,8 @@ Run the `docker login` command that is returned to finish authenticating your Do
 Next, make a repository to store the name and ping images, respectively.
 [source, role="no_copy"]
 ```
-aws ecr create-repository --repository-name awsguide/name
-aws ecr create-repository --repository-name awsguide/ping
+aws ecr create-repository --repository-name awsguide/system
+aws ecr create-repository --repository-name awsguide/inventory
 ```
 
 You should see an output similar to the following.
@@ -276,10 +275,10 @@ You should see an output similar to the following.
 {
     "repository": {
         "registryId": "12345",
-        "repositoryName": "awsguide/name",
-        "repositoryArn": "arn:aws:ecr:us-east-2:12345:repository/awsguide/name",
+        "repositoryName": "awsguide/system",
+        "repositoryArn": "arn:aws:ecr:us-east-2:12345:repository/awsguide/system",
         "createdAt": 1553111916.0,
-        "repositoryUri": "12345.ecr.us-east-2.amazonaws.com/awsguide/name"
+        "repositoryUri": "12345.ecr.us-east-2.amazonaws.com/awsguide/system"
     }
 }
 ```
@@ -292,8 +291,8 @@ Next, you need to tag your Docker images with the relevant data about your regis
 
 [source, role="no_copy"]
 ```
-docker tag name:1.0-SNAPSHOT [name-repository-uri]:1.0-SNAPSHOT
-docker tag ping:1.0-SNAPSHOT [ping-repository-uri]:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT [system-repository-uri]:1.0-SNAPSHOT
+docker tag inventory:1.0-SNAPSHOT [inventory-repository-uri]:1.0-SNAPSHOT
 ```
 
 // Pushing images
@@ -301,12 +300,12 @@ Finally, push your images to the registry.
 
 [source, role="no_copy"]
 ```
-docker push [name-repository-uri]:1.0-SNAPSHOT
-docker push [ping-repository-uri]:1.0-SNAPSHOT
+docker push [system-repository-uri]:1.0-SNAPSHOT
+docker push [inventory-repository-uri]:1.0-SNAPSHOT
 ```
 
-When tagging and pushing your images, remember to subtitute `[name-repository-uri]` and 
-`[ping-repository-uri]` with the appropriate URI for the name and ping repositories. 
+When tagging and pushing your images, remember to subtitute `[system-repository-uri]` and 
+`[inventory-repository-uri]` with the appropriate URI for the system and inventory repositories. 
 
 // =================================================================================================
 // Deploying the microservices
@@ -338,7 +337,7 @@ include::finish/kubernetes.yaml[tags=**]
 [role="edit_command_text"]
 The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want 
 to use for the container. Update the [hotspot=18 hotspot=39]`image` fields to point to 
-your `name` and `ping` repository URI, respectively.
+your `system` and `inventory` repository URI, respectively.
 
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
@@ -357,9 +356,9 @@ You'll see an output similar to the following if all the pods are healthy and ru
 
 [source, role="no_copy"]
 ----
-NAME                               READY     STATUS    RESTARTS   AGE
-name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          15s
-ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
+NAME                                    READY     STATUS    RESTARTS   AGE
+system-deployment-6bd97d9bf6-4ccds      1/1       Running   0          15s
+inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
 === Making requests to the microservices
@@ -389,20 +388,21 @@ aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id 
 ```
 
 After you are finished adding the inbound rules to the security group, you may need to 
-wait a few minutes before trying to access the `name` and `ping` microservices.
+wait a few minutes before trying to access the `system` and `inventory` microservices.
 
-Make a request to the `name` microservice substituting in `ip-address`.
-
-[source, role="no_copy"]
-```
-curl http://[ip-address]:31000/api/name
-```
-
-Make a request to the `ping` microservice substituting in `ip-address`.
+Make a request to the `system` microservice substituting in `ip-address` with the `EXTERNAL_IP`
+you noted early in this guide.
 
 [source, role="no_copy"]
 ```
-curl http://[ip-address]:32000/api/ping/name-service
+curl http://[ip-address]:31000/system/properties 
+```
+
+Make a request to the `inventory` microservice substituting in `ip-address`.
+
+[source, role="no_copy"]
+```
+curl http://[ip-address]:32000/inventory/systems
 ```
 
 // =================================================================================================
@@ -425,9 +425,9 @@ in the ready state before proceeding further. The default properties defined in 
 |===
 | *Property*                      | *Description*
 | [hotspot=35]`cluster.ip`        | IP or hostname for your cluster
-| [hotspot=36]`name.kube.service` | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
-| [hotspot=37]`name.node.port`    | The NodePort of the {kube} Service `name-service`, 31000 by default.
-| [hotspot=38]`ping.node.port`    | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+| [hotspot=36]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=37]`system.node.port`    | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=38]`inventory.node.port`    | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Use the following command to run the integration tests against your cluster. Subtitute 
@@ -447,12 +447,12 @@ If the tests pass, you'll see an output similar to the following for each servic
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.name.NameEndpointTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.name.NameEndpointTest
+Running it.io.openliberty.guides.system.SystemEndpointTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.system.SystemEndpointTest
 
-Results :
+Results:
 
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 [source, role="no_copy"]
@@ -460,12 +460,12 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.ping.PingEndpointTest
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.ping.PingEndpointTest
+Running it.io.openliberty.guides.inventory.InventoryEndpointTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.inventory.InventoryEndpointTest
 
-Results :
+Results:
 
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 === Deploying new version of name microservice
@@ -487,7 +487,7 @@ Use Maven to package your microservice.
 mvn package
 ```
 
-Since you built a new image, it will have to be pushed to the `awsguide/name` repository
+Since you built a new image, it will have to be pushed to the `awsguide/system` repository
 of your container registry again.
 
 // Tagging images
@@ -495,7 +495,7 @@ Tag your Docker image with the relevant data about your registry.
 
 [source, role="no_copy"]
 ```
-docker tag name:2.0-SNAPSHOT [name-repository-uri]:2.0-SNAPSHOT
+docker tag system:2.0-SNAPSHOT [system-repository-uri]:2.0-SNAPSHOT
 ```
 
 // Pushing images
@@ -503,17 +503,17 @@ Push your image to the registry.
 
 [source, role="no_copy"]
 ```
-docker push [name-repository-uri]:2.0-SNAPSHOT
+docker push [system-repository-uri]:2.0-SNAPSHOT
 ```
 
-Update the `name-deployment` deployment to use the new container image that we just
+Update the `system-deployment` deployment to use the new container image that we just
 pushed to the registry.
 [source, role="no_copy"]
 ```
-kubectl set image deployment/name-deployment name-container=[name-repository-uri]:2.0-SNAPSHOT
+kubectl set image deployment/system-deployment system-container=[system-repository-uri]:2.0-SNAPSHOT
 ```
 
-Use the following command to find the name of the pod running the `name` microservice.
+Use the following command to find the name of the pod running the `system` microservice.
 
 [role=command]
 ```
@@ -523,12 +523,12 @@ kubectl get pods
 [source, role="no_copy"]
 ----
 NAME                                        READY     STATUS    RESTARTS   AGE
-name-app-ibm-open-libert-7f78456848-pp46r   1/1       Running   0          6m
-ping-app-ibm-open-libert-6fd6b9dc4-942s2    1/1       Running   0          20m
+system-app-ibm-open-libert-7f78456848-pp46r   1/1       Running   0          6m
+inventory-app-ibm-open-libert-6fd6b9dc4-942s2    1/1       Running   0          20m
 ----
 
 Observe that in this case the `name` microservice is running in the pod called 
-`name-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the 
+`system-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the 
 following command to see more details about the pod.
 
 [source, role="no_copy"]
@@ -537,18 +537,18 @@ kubectl describe pod [pod-name]
 ```
 
 View the events at the bottom of the command's output. Observe that the pod is using the 
-new Docker image `name:2.0-SNAPSHOT`.
+new Docker image `system:2.0-SNAPSHOT`.
 
 [source, role="no_copy"]
 ----
 Events:
   Type     Reason                 Age   From                         Message
   ----     ------                 ----  ----                         -------
-  Normal   Scheduled              10m   default-scheduler            Successfully assigned name-app-ibm-open-libert-7f78456848-pp46r to docker-for-desktop
+  Normal   Scheduled              10m   default-scheduler            Successfully assigned system-app-ibm-open-libert-7f78456848-pp46r to docker-for-desktop
   Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "default-token-d89tg"
   Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "liberty-overrides"
   Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "liberty-config"
-  Normal   Pulled                 10m   kubelet, docker-for-desktop  Container image "name:2.0-SNAPSHOT" already present on machine
+  Normal   Pulled                 10m   kubelet, docker-for-desktop  Container image "system:2.0-SNAPSHOT" already present on machine
   Normal   Created                10m   kubelet, docker-for-desktop  Created container
   Normal   Started                10m   kubelet, docker-for-desktop  Started container
 ----
