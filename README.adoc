@@ -522,13 +522,13 @@ kubectl get pods
 
 [source, role="no_copy"]
 ----
-NAME                                        READY     STATUS    RESTARTS   AGE
-system-app-ibm-open-libert-7f78456848-pp46r   1/1       Running   0          6m
-inventory-app-ibm-open-libert-6fd6b9dc4-942s2    1/1       Running   0          20m
+NAME                                   READY     STATUS    RESTARTS   AGE
+inventory-deployment-6fd959cc4-rf2m2   1/1       Running   0          7m
+system-deployment-677b9f5d9c-nqzcf     1/1       Running   0          7m
 ----
 
-Observe that in this case the `name` microservice is running in the pod called 
-`system-app-ibm-open-libert-7f78456848-pp46r`. Substitute the name of your pod into the 
+Observe that in this case the `system` microservice is running in the pod called 
+`system-deployment-677b9f5d9c-nqzcf`. Substitute the name of your pod into the 
 following command to see more details about the pod.
 
 [source, role="no_copy"]
@@ -542,15 +542,13 @@ new Docker image `system:2.0-SNAPSHOT`.
 [source, role="no_copy"]
 ----
 Events:
-  Type     Reason                 Age   From                         Message
-  ----     ------                 ----  ----                         -------
-  Normal   Scheduled              10m   default-scheduler            Successfully assigned system-app-ibm-open-libert-7f78456848-pp46r to docker-for-desktop
-  Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "default-token-d89tg"
-  Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "liberty-overrides"
-  Normal   SuccessfulMountVolume  10m   kubelet, docker-for-desktop  MountVolume.SetUp succeeded for volume "liberty-config"
-  Normal   Pulled                 10m   kubelet, docker-for-desktop  Container image "system:2.0-SNAPSHOT" already present on machine
-  Normal   Created                10m   kubelet, docker-for-desktop  Created container
-  Normal   Started                10m   kubelet, docker-for-desktop  Started container
+  Type    Reason     Age   From                                    Message
+  ----    ------     ----  ----                                    -------
+  Normal  Scheduled  1m    default-scheduler                       Successfully assigned default/system-deployment-dd44895f6-wmlkm to ip.us-east-2.compute.internal
+  Normal  Pulling    1m    kubelet, ip.us-east-2.compute.internal  pulling image "1234.dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
+  Normal  Pulled     1m    kubelet, ip.us-east-2.compute.internal  Successfully pulled image "1234.dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
+  Normal  Created    1m    kubelet, ip.us-east-2.compute.internal  Created container
+  Normal  Started    1m    kubelet, ip.us-east-2.compute.internal  Started container
 ----
 
 // =================================================================================================
