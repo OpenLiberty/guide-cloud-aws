@@ -403,7 +403,7 @@ Make a request to the `inventory` microservice substituting in `ip-address`.
 
 [source, role="no_copy"]
 ```
-curl http://[ip-address]:32000/inventory/systems
+curl http://[ip-address]:32000/inventory/systems/system-service
 ```
 
 // =================================================================================================
