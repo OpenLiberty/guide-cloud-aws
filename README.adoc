@@ -61,11 +61,12 @@ Kubernetes on AWS without needing to install or maintain your own Kubernetes con
 It provides a hosted {kube} cluster that you may deploy your microservices to. You will 
 use it in conjunction with Amazon Elastic Container Registry (ECR).
 
-The two microservices you will deploy are called system and inventory. The system microservice 
-simply returns the JVM systems properties of the container it is running in and it returns 
-the Pod’s name in the HTTP header making it easy to distinguish it from its other replicas. 
-The inventory microservice adds the properties from the system microservice to the inventory. 
-This demonstrates how communication can be established between pods inside a cluster.
+The two microservices you will deploy are called `system` and `inventory`. The `system` 
+microservice simply returns the JVM systems properties of the container it is running in 
+and it returns the Pod's name in the HTTP header making it easy to distinguish it from 
+its other replicas. The `inventory` microservice adds the properties from the `system` 
+microservice to the inventory. This demonstrates how communication can be established 
+between pods inside a cluster.
 
 // =================================================================================================
 // Prerequisites
