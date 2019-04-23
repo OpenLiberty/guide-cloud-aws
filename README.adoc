@@ -147,7 +147,7 @@ include::{common-includes}/gitclone.adoc[]
 
 == Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
 
-In this section you will learn how to deploy two microservices in Open Liberty containers to a {kube}
+In this section, you will learn how to deploy two microservices in Open Liberty containers to a {kube}
 cluster on EKS. After provisioning a {kube} cluster, you will build and containerize 
 the `system` and `inventory` microservices, push them to a Docker registry and then deploy
 them to your {kube} cluster. 
@@ -208,8 +208,11 @@ picks up the Dockerfile located in the same directory as its POM file and builds
 
 ****
 [system]#*{win}*#
+
 On the Docker Desktop General Setting page, ensure that the option Expose daemon on 
-tcp://localhost:2375 without TLS is enabled
+tcp://localhost:2375 without TLS is enabled. This configuration is required by the `dockerfile-maven` 
+part of the build.
+
 ****
 
 Navigate to the `start` directory and run the following command:
@@ -475,8 +478,8 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 
 === Deploying new version of system microservice
 
-Optionally, you may want to learn how to re-deploy a microservice. In this section we 
-will bump the version of the `system` microservice to `2.0-SNAPSHOT` and re-deploy
+Optionally, you might want to learn how to redeploy a microservice. In this section, you 
+will bump the version of the `system` microservice to `2.0-SNAPSHOT` and redeploy
 the new version of the microservice.
 
 The tag for the Docker image is dependent on the version specified in the pom.xml file. 
