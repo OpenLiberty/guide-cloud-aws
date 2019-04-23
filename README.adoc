@@ -433,7 +433,7 @@ appropriate hostname:
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you can use the `-I` option in the `curl` when making a request to `{system-api}`.
 The second URL adds properties from `system-service` to the inventory.
-{kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
+Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
 // =================================================================================================
