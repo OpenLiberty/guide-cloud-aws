@@ -107,6 +107,30 @@ To verify that the AWS CLI is installed correctly, run the following command.
 aws --version
 ```
 
+
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
+
+[role=command]
+include::{common-includes}/gitclone.adoc[]
+
+// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
+
+
+// =================================================================================================
+// Creating a Kubernetes cluster on EKS
+// =================================================================================================
+
+== Creating a Kubernetes cluster on EKS
+
+// =================================================================================================
+// Configuring the AWS CLI
+// =================================================================================================
+
+=== Configuring the AWS CLI
+
 Once the AWS CLI is installed, it must be configured by running the AWS configure command. 
 Before configuring the AWS CLI, you will need to create an AWS Identity and Access Management (IAM)
 user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^]
@@ -135,22 +159,9 @@ After you are done filling out the various pieces of information, the settings w
 stored in the default profile. Anytime you run an AWS CLI command without specifying 
 a profile, the default profile will be used. 
 
-
 // =================================================================================================
-// Getting Started
+// Provisioning a cluster
 // =================================================================================================
-
-[role=command]
-include::{common-includes}/gitclone.adoc[]
-
-// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
-
-== Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
-
-In this section, you will learn how to deploy two microservices in Open Liberty containers to a {kube}
-cluster on EKS. After provisioning a {kube} cluster, you will build and containerize 
-the `system` and `inventory` microservices, push them to a Docker registry and then deploy
-them to your {kube} cluster. 
 
 === Provisioning a cluster
 
@@ -185,6 +196,16 @@ kubectl get nodes
 NAME                            STATUS    ROLES     AGE       VERSION
 ip.us-east-2.compute.internal   Ready     <none>    7m        v1.11.5
 ----
+
+// =================================================================================================
+// Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
+// =================================================================================================
+
+== Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
+
+In this section, you will learn how to deploy two microservices in Open Liberty containers to a {kube}
+cluster on EKS. You will build and containerize the `system` and `inventory` microservices, 
+push them to a Docker registry and then deploy them to your {kube} cluster. 
 
 // =================================================================================================
 // Building and containerizing the microservices
