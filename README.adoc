@@ -125,6 +125,8 @@ include::{common-includes}/gitclone.adoc[]
 
 == Creating a Kubernetes cluster on EKS
 
+Before you can deploy your microservices, you must create a {kube} cluster.
+
 // =================================================================================================
 // Configuring the AWS CLI
 // =================================================================================================
