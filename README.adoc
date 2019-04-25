@@ -25,7 +25,7 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
  
-Explore how to push Docker images to a Amazon Elastic Container Registry and run them inside of containers on Amazon Elastic Container Service for Kubernetes.
+Explore how to push Docker images to an Amazon Elastic Container Registry and run them inside of containers on Amazon Elastic Container Service for Kubernetes.
 
 :kube: Kubernetes
 :hashtag: #
@@ -87,7 +87,7 @@ documentation for downloading and setting up `kubectl` on your platform.
 IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
 instructions for installing on your platform. 
 
-- *eksctl:* In this guide, we will use the `eksctl` CLI tool for provisioning your EKS cluster. 
+- *eksctl:* In this guide, you will use the `eksctl` CLI tool for provisioning your EKS cluster. 
 Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and 
 download the latest stable release. Extract the archive and add the directory with the 
 extracted files to your path.
@@ -167,9 +167,8 @@ a profile, the default profile will be used.
 
 === Provisioning a cluster
 
-In this guide, we use `eksctl` to create the Kubernetes cluster on EKS. The `eksctl`
-CLI tool greatly simplifies the process of creating clusters on EKS. To create your 
-cluster, use the `eksctl create cluster` command.
+The `eksctl` CLI tool greatly simplifies the process of creating clusters on EKS. To 
+create your cluster, use the `eksctl create cluster` command.
 
 [role=command]
 ```
@@ -220,9 +219,8 @@ The first step of deploying to {kube} is to build your microservices and contain
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven
 project. It's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
 `start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary
-for building Docker images. If you're unfamiliar with Dockerfiles, check out the
+for building the Docker images. If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide.
-It covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
 use the `.war` file to build a Docker image. We've setup the projects such that this process is automated
@@ -232,8 +230,8 @@ picks up the Dockerfile located in the same directory as its POM file and builds
 ****
 [system]#*{win}*#
 
-On the Docker Desktop General Setting page, ensure that the option Expose daemon on 
-tcp://localhost:2375 without TLS is enabled. This configuration is required by the `dockerfile-maven` 
+On the Docker Desktop General Setting page, ensure that the option `Expose daemon on 
+tcp://localhost:2375 without TLS` is enabled. This configuration is required by the `dockerfile-maven` 
 part of the build.
 
 ****
@@ -279,7 +277,7 @@ build log for any potential errors.
 Pushing the images to a registry allows the cluster to create pods using your Docker images. 
 The registry that you will use is called Amazon Elastic Container Registry (ECR).
 
-First, we must authenticate your Docker client to your ECR registry. Start by running the
+First, you must authenticate your Docker client to your ECR registry. Start by running the
 `get-login` command.
 [role=command]
 ```
@@ -317,7 +315,7 @@ You will see an output similar to the following.
 }
 ```
 
-Take note of the repository URI for both the `system` and `inventory` repository as you will need 
+Take note of the repository URI for both the `system` and `inventory` repositories as you will need 
 them when tagging and pushing your images.
 
 // Tagging images
@@ -404,7 +402,7 @@ hostname you will substitute into commands later in the guide.
 kubectl get nodes -o wide
 ```
 
-Before we can make a request to `EXTERNAL-IP:31000` or `EXTERNAL-IP:32000`, we must modify
+Before you can make a request to `EXTERNAL-IP:31000` or `EXTERNAL-IP:32000`, you must modify
 the security group to allow incoming traffic through ports `31000` and `32000`. To get the 
 `group-id` of the security group, use the `aws ec2 describe-security-groups` command.
 [role=command]
@@ -433,8 +431,8 @@ appropriate hostname:
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you can use the `-I` option in the `curl` when making a request to `{system-api}`.
 The second URL adds properties from `system-service` to the inventory.
-Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
-depending on whether `kube-service` is a valid {kube} Service that can be accessed.
+Visiting `{inventory-api}/[kube-service]` adds system properties to the inventory
+if `[kube-service]` is a valid {kube} Service that can be accessed.
 
 // =================================================================================================
 // Testing microservices that are running on AWS EKS
@@ -539,7 +537,7 @@ Push your image to the registry.
 docker push [system-repository-uri]:2.0-SNAPSHOT
 ```
 
-Update the `system-deployment` deployment to use the new container image that we just
+Update the `system-deployment` deployment to use the new container image that you just
 pushed to the registry.
 [source, role="no_copy"]
 ```
