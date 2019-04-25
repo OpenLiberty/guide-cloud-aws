@@ -219,7 +219,9 @@
                                     <inventory.ingress.path>
                                         ${inventory.ingress.path}
                                     </inventory.ingress.path>
-                                    <inventory.node.port>${inventory.node.port}</inventory.node.port>
+                                    <inventory.node.port>
+                                        ${inventory.node.port}
+                                    </inventory.node.port>
                                 </systemPropertyVariables>
                             </configuration>
                         </execution>
