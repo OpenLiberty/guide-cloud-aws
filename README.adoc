@@ -292,7 +292,7 @@ docker login -u AWS -p [password_string] https://[aws_account_id].dkr.ecr.us-eas
 ```
 
 Run the `docker login` command that is returned to finish authenticating your Docker client.
-The `[aws_account_id` is a unique, 12-digit ID that is assigned to every AWS account. Throughout
+The `[aws_account_id]` is a unique 12-digit ID that is assigned to every AWS account. Throughout
 the guide, you will notice this ID come up in the output from various commands since AWS uses
 it to differentiate your resources from other accounts. 
 
