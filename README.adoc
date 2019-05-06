@@ -496,7 +496,7 @@ Results:
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-=== Deploying new version of system microservice
+== Deploying new version of system microservice
 
 Optionally, you might want to learn how to redeploy a microservice. In this section, you 
 will bump the version of the `system` microservice to `2.0-SNAPSHOT` and redeploy
