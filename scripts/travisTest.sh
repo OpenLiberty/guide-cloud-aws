@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euxo pipefail
 
 ##############################################################################
 ##
@@ -28,8 +29,8 @@ echo `minikube ip`
 printf "\ncurl http://`minikube ip`:31000/system/properties\n"
 curl http://`minikube ip`:31000/system/properties
 
-printf "\ncurl http://`minikube ip`:32000/inventory/systems/name-service\n"
-curl http://`minikube ip`:32000/api/inventory/systems/name-service
+printf "\ncurl http://`minikube ip`:32000/inventory/systems/system-service\n"
+curl http://`minikube ip`:32000/api/inventory/systems/system-service
 
 printf "\nmvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`\n"
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
