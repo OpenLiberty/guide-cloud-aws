@@ -18,14 +18,14 @@
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
-:page-seo-description: Learn how to push Docker images to Amazon ECR and run them inside of containers on Amazon EKS.
+:page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using ECR as a private Docker registry.
 :guide-author: Open Liberty
-= Deploying microservices to Amazon EKS
+= Deploying microservices to Amazon EKS 
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
- 
-Explore how to push Docker images to an Amazon Elastic Container Registry and run them inside of containers on Amazon Elastic Container Service for Kubernetes.
+
+Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes (EKS).
 
 :kube: Kubernetes
 :hashtag: #
