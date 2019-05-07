@@ -20,7 +20,7 @@
 :page-seo-title: Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
 :page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using ECR as a private Docker registry.
 :guide-author: Open Liberty
-= Deploying microservices to Amazon EKS 
+= Deploying microservices to Amazon Web Services (AWS)
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
@@ -43,27 +43,31 @@ Explore how to deploy microservices to Amazon Elastic Container Service for Kube
 == What you'll learn
 
 You will learn how to deploy two microservices in Open Liberty containers to a {kube}
-cluster on Amazon Elastic Container Service for Kubernetes (EKS). Amazon Web Services (AWS) 
-offers a managed Kubernetes service called Amazon EKS. EKS simplifies the process of running 
-Kubernetes on AWS without needing to install or maintain your own Kubernetes control plane. 
-It provides a hosted {kube} cluster that you can deploy your microservices to. You will 
-use it in conjunction with Amazon Elastic Container Registry (ECR).
+cluster on Amazon Elastic Container Service for Kubernetes (EKS). 
 
 Kubernetes is an open source container orchestrator that automates many tasks involved in 
-deploying, managing, and scaling containerized applications. Single node {kube} clusters 
-such as Minikube and Docker Desktop are great for testing your  microservices locally, 
-but ultimately you will want a system that can handle production workloads and be able to 
-deploy your microservices to the cloud as part of DevOps. Various clouds offer solutions 
-for running your workloads in a {kube} cluster. Using a cloud-based infrastructure allows 
-you to focus on developing your microservices rather than worrying about details that are 
-related to the servers you deploy them to. Using cloud allows you to easily scale your 
-microservices and serve them in a high-availability setup.
+deploying, managing, and scaling containerized applications. If you would like to learn
+more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
+guide.
+
+Various clouds offer solutions for running your workloads in a {kube} cluster. Using a 
+cloud-based infrastructure allows you to focus on developing your microservices rather 
+than worrying about details that are related to the servers you deploy them to. Using 
+cloud allows you to easily scale your microservices and serve them in a high-availability 
+setup.
+
+Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon EKS. EKS 
+simplifies the process of running Kubernetes on AWS without needing to install or maintain 
+your own Kubernetes control plane. It provides a hosted {kube} cluster that you can deploy 
+your microservices to. You will use it in conjunction with Amazon Elastic Container 
+Registry (ECR).
 
 The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
 returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
 making replicas easy to distinguish from each other. The `inventory` microservice
 adds the properties from the `system` microservice to the inventory. This demonstrates
 how communication can be established between pods inside a cluster.
+
 
 // =================================================================================================
 // Prerequisites
