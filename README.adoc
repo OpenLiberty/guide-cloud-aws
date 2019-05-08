@@ -18,9 +18,9 @@
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
-:page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using ECR as a private Docker registry.
+:page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using Amazon Elastic Container Registry (ECR) as a private Docker registry.
 :guide-author: Open Liberty
-= Deploying microservices to Amazon Web Services (AWS)
+= Deploying microservices to Amazon Web Services
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
@@ -43,7 +43,7 @@ Explore how to deploy microservices to Amazon Elastic Container Service for Kube
 == What you'll learn
 
 You will learn how to deploy two microservices in Open Liberty containers to a {kube}
-cluster on Amazon Elastic Container Service for Kubernetes (Amazon EKS). 
+cluster on Amazon Elastic Container Service for Kubernetes (EKS). 
 
 Kubernetes is an open source container orchestrator that automates many tasks involved in 
 deploying, managing, and scaling containerized applications. If you would like to learn
@@ -60,7 +60,8 @@ Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon EKS.
 simplifies the process of running Kubernetes on AWS without needing to install or maintain 
 your own Kubernetes control plane. It provides a hosted {kube} cluster that you can deploy 
 your microservices to. You will use it in conjunction with Amazon Elastic Container 
-Registry (ECR).
+Registry (ECR). Amazon ECR is a private registry used to store and distribute your
+Docker images.
 
 The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
 returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
