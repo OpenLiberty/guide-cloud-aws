@@ -599,8 +599,8 @@ kubectl delete -f kubernetes.yaml
 Delete the ECR repositories used to store the `system` and `inventory` images.
 [role=command]
 ```
-aws ecr delete-repository --repository-name awsguide/system
-aws ecr delete-repository --repository-name awsguide/inventory
+aws ecr delete-repository --repository-name awsguide/system --force
+aws ecr delete-repository --repository-name awsguide/inventory --force
 ```
 
 Remove your EKS cluster.
