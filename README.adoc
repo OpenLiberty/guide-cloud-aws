@@ -25,7 +25,7 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
-Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes (Amazon EKS).
+Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes (EKS) on Amazon Web Services (AWS).
 
 :kube: Kubernetes
 :hashtag: #
