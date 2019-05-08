@@ -53,7 +53,7 @@ guide.
 Various clouds offer solutions for running your workloads in a {kube} cluster. Using a 
 cloud-based infrastructure allows you to focus on developing your microservices rather 
 than worrying about details that are related to the servers you deploy them to. Using 
-cloud allows you to easily scale your microservices and serve them in a high-availability 
+a cloud allows you to easily scale your microservices and serve them in a high-availability 
 setup.
 
 Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon EKS. EKS 
