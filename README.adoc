@@ -18,7 +18,7 @@
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
-:page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using Amazon Elastic Container Registry (ECR) as a private Docker registry.
+:page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using Amazon Elastic Container Registry (ECR) as a private container registry.
 :guide-author: Open Liberty
 = Deploying microservices to Amazon Web Services
 
@@ -209,7 +209,7 @@ ip.us-east-2.compute.internal   Ready     <none>    7m        v1.11.5
 
 In this section, you will learn how to deploy two microservices in Open Liberty containers to a {kube}
 cluster on EKS. You will build and containerize the `system` and `inventory` microservices, 
-push them to a Docker registry and then deploy them to your {kube} cluster. 
+push them to a container registry and then deploy them to your {kube} cluster. 
 
 // =================================================================================================
 // Building and containerizing the microservices
@@ -217,7 +217,7 @@ push them to a Docker registry and then deploy them to your {kube} cluster.
 
 === Building and containerizing the microservices
 
-The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
+The first step of deploying to {kube} is to build your microservices and containerize them.
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven
 project. It's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
@@ -275,9 +275,9 @@ build log for any potential errors.
 // Pushing the images to a docker registry
 // =================================================================================================
 
-=== Pushing the images to a Docker registry
+=== Pushing the images to a container registry
 
-Pushing the images to a registry allows the cluster to create pods using your Docker images. 
+Pushing the images to a registry allows the cluster to create pods using your container images. 
 The registry that you will use is called Amazon Elastic Container Registry (ECR).
 
 First, you must authenticate your Docker client to your ECR registry. Start by running the
@@ -325,7 +325,7 @@ Take note of the repository URI for both the `system` and `inventory` repositori
 them when tagging and pushing your images.
 
 // Tagging images
-Next, you need to tag your Docker images with the relevant data about your registry. 
+Next, you need to tag your container images with the relevant data about your registry. 
 
 [source, role="no_copy"]
 ```
@@ -351,7 +351,7 @@ When tagging and pushing your images, remember to substitute `[system-repository
 
 === Deploying the microservices
 
-Now that your Docker images are built, deploy them using a Kubernetes resource definition.
+Now that your container images are built, deploy them using a Kubernetes resource definition.
 
 A Kubernetes resource definition is a yaml file that contains a description of all your 
 deployments, services, or any other resources that you want to deploy. All resources can 
@@ -373,7 +373,7 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[tags=**]
 ----
 [role="edit_command_text"]
-The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want 
+The [hotspot=18 hotspot=39]`image` is the name and tag of the container image that you want 
 to use for the container. Update the system [hotspot=18]`image` and the inventory [hotspot=39]`image` 
 fields to point to your `system` and `inventory` repository URI, respectively.
 
@@ -471,7 +471,7 @@ Use the following command to run the integration tests against your cluster. Sub
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=[hostname]
 ```
 
-The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
+The `dockerfile.skip` parameter is set to `true` in order to skip building a new container image.
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
 
@@ -507,7 +507,7 @@ Optionally, you might want to learn how to redeploy a microservice. In this sect
 will bump the version of the `system` microservice to `2.0-SNAPSHOT` and redeploy
 the new version of the microservice.
 
-The tag for the Docker image is dependent on the version specified in the pom.xml file. 
+The tag for the container image is dependent on the version specified in the pom.xml file. 
 Use the following Maven command to bump the version of the microservice to `2.0-SNAPSHOT`.
 
 [role=command]
@@ -515,7 +515,7 @@ Use the following Maven command to bump the version of the microservice to `2.0-
 mvn versions:set -DnewVersion=2.0-SNAPSHOT
 ```
 
-Use Maven to repackage your microservice and build the new version of the Docker container.
+Use Maven to repackage your microservice and build the new version of the container image.
 
 [role=command]
 ```
@@ -526,7 +526,7 @@ Since you built a new image, it must be pushed to the `awsguide/system` reposito
 of your container registry again.
 
 // Tagging images
-Tag your Docker image with the relevant data about your registry.
+Tag your container image with the relevant data about your registry.
 
 [source, role="no_copy"]
 ```
@@ -572,7 +572,7 @@ kubectl describe pod [pod-name]
 ```
 
 View the events at the bottom of the command's output. Observe that the pod is using the 
-new Docker image `system:2.0-SNAPSHOT`.
+new container image `system:2.0-SNAPSHOT`.
 
 [source, role="no_copy"]
 ----
