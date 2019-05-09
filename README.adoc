@@ -61,7 +61,7 @@ simplifies the process of running Kubernetes on AWS without needing to install o
 your own Kubernetes control plane. It provides a hosted {kube} cluster that you can deploy 
 your microservices to. You will use it in conjunction with Amazon Elastic Container 
 Registry (ECR). Amazon ECR is a private registry used to store and distribute your
-Docker images.
+container images.
 
 The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
 returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
