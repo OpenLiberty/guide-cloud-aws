@@ -327,7 +327,7 @@ them when tagging and pushing your images.
 // Tagging images
 Next, you need to tag your container images with the relevant data about your registry. 
 
-[source, role="no_copy"]
+[role=command]
 ```
 docker tag system:1.0-SNAPSHOT [system-repository-uri]:1.0-SNAPSHOT
 docker tag inventory:1.0-SNAPSHOT [inventory-repository-uri]:1.0-SNAPSHOT
@@ -336,7 +336,7 @@ docker tag inventory:1.0-SNAPSHOT [inventory-repository-uri]:1.0-SNAPSHOT
 // Pushing images
 Finally, push your images to the registry.
 
-[source, role="no_copy"]
+[role=command]
 ```
 docker push [system-repository-uri]:1.0-SNAPSHOT
 docker push [inventory-repository-uri]:1.0-SNAPSHOT
@@ -419,7 +419,8 @@ aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide
 Then, add the following rules to the security group to allow incoming traffic through ports
 `31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `ID` in the
 output of the previous command.
-[source, role="no_copy"]
+
+[role=command]
 ```
 aws ec2 authorize-security-group-ingress --protocol tcp --port 31000 --group-id [security-group-id] --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id [security-group-id] --cidr 0.0.0.0/0
@@ -466,7 +467,7 @@ in the ready state before proceeding further. The default properties that are de
 Use the following command to run the integration tests against your cluster. Substitute 
 `[hostname]` with the appropriate value.
 
-[source, role="no_copy"]
+[role=command]
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=[hostname]
 ```
@@ -528,7 +529,7 @@ of your container registry again.
 // Tagging images
 Tag your container image with the relevant data about your registry.
 
-[source, role="no_copy"]
+[role=command]
 ```
 docker tag system:2.0-SNAPSHOT [system-repository-uri]:2.0-SNAPSHOT
 ```
@@ -536,14 +537,15 @@ docker tag system:2.0-SNAPSHOT [system-repository-uri]:2.0-SNAPSHOT
 // Pushing images
 Push your image to the registry.
 
-[source, role="no_copy"]
+[role=command]
 ```
 docker push [system-repository-uri]:2.0-SNAPSHOT
 ```
 
 Update the `system-deployment` deployment to use the new container image that you just
 pushed to the registry.
-[source, role="no_copy"]
+
+[role=command]
 ```
 kubectl set image deployment/system-deployment system-container=[system-repository-uri]:2.0-SNAPSHOT
 ```
@@ -566,7 +568,7 @@ Observe that in this case the `system` microservice is running in the pod called
 `system-deployment-677b9f5d9c-nqzcf`. Substitute the name of your pod into the 
 following command to see more details about the pod.
 
-[source, role="no_copy"]
+[role=command]
 ```
 kubectl describe pod [pod-name]
 ```
