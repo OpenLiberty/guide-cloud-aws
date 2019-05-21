@@ -180,7 +180,7 @@ eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
 
 Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` Amazon
 Elastic Compute Cloud (EC2) instance as the worker node. When the cluster is created, 
-you see an output similar to the following.
+you see an output similar to the following:
 
 [source, role="no_copy"]
 ```
