@@ -10,9 +10,9 @@
 :projectid: cloud-aws
 :page-layout: guide-multipane
 :page-duration: 45 minutes
-:page-releasedate: 2019-04-01
+:page-releasedate: 2019-05-24
 :page-description: Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes (EKS) on Amazon Web Services (AWS).
-:page-tags: ['Kubernetes', 'Docker']
+:page-tags: ['Kubernetes', 'Docker', 'Cloud']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['kubernetes-intro', 'kubernetes-microprofile-config', 'kubernetes-microprofile-health', 'istio-intro']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
