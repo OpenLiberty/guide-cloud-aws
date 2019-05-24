@@ -505,7 +505,7 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 == Deploying new version of system microservice
 
 Optionally, you might want to make changes to your microservice and learn how to redeploy 
-the updated version of the microservice. In this section, you will bump the version of 
+the updated version of your microservice. In this section, you will bump the version of 
 the `system` microservice to `2.0-SNAPSHOT` and redeploy the new version of the microservice.
 
 The tag for the container image depends on the version that is specified in the pom.xml file. 
