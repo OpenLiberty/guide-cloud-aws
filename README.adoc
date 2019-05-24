@@ -401,13 +401,13 @@ inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 === Making requests to the microservices
 
 Take note of the `EXTERNAL-IP` in the output of the following command. It is the 
-hostname you will later substitute into commands: 
+hostname you will later substitute into `[hostname]`: 
 [role=command]
 ```
 kubectl get nodes -o wide
 ```
 
-Before you can make a request to `EXTERNAL-IP:31000` or `EXTERNAL-IP:32000`, you must modify
+Before you can make a request to `[hostname]:31000` or `[hostname]:32000`, you must modify
 the security group to allow incoming traffic through ports `31000` and `32000`. To get the 
 `group-id` of the security group, use the `aws ec2 describe-security-groups` command:
 [role=command]
@@ -504,9 +504,9 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 
 == Deploying new version of system microservice
 
-Optionally, you might want to learn how to redeploy a microservice. In this section, you 
-will bump the version of the `system` microservice to `2.0-SNAPSHOT` and redeploy
-the new version of the microservice.
+Optionally, you might want to make changes to your microservice and learn how to redeploy 
+the updated version of the microservice. In this section, you will bump the version of 
+the `system` microservice to `2.0-SNAPSHOT` and redeploy the new version of the microservice.
 
 The tag for the container image depends on the version that is specified in the pom.xml file. 
 Use the following Maven command to bump the version of the microservice to `2.0-SNAPSHOT`:
