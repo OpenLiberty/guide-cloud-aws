@@ -183,7 +183,7 @@ eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
 Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` Amazon
 Elastic Compute Cloud (EC2) instance as the worker node. The `t2.small` EC2 instance is 
 not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^]
-for more details. When the cluster is created, you see an output similar to the following:
+documentation for more details. When the cluster is created, you see an output similar to the following:
 
 [source, role="no_copy"]
 ```
