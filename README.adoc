@@ -60,7 +60,9 @@ Service for {kube} (EKS). EKS simplifies the process of running Kubernetes on AW
 needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
 cluster that you can deploy your microservices to. You will use EKS with Amazon Elastic 
 Container Registry (ECR). Amazon ECR is a private registry that is used to store 
-and distribute your container images.
+and distribute your container images. Note, since EKS is not free, there is a small
+cost that is associated with running this guide. See the official
+https://aws.amazon.com/eks/pricing/[Amazon EKS pricing^] documentation for more details.
 
 The two microservices you will deploy are called `system` and `inventory`. 
 The `system` microservice returns the JVM system properties of the running container. 
@@ -179,8 +181,9 @@ eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
 ```
 
 Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` Amazon
-Elastic Compute Cloud (EC2) instance as the worker node. When the cluster is created, 
-you see an output similar to the following:
+Elastic Compute Cloud (EC2) instance as the worker node. The `t2.small` EC2 instance is 
+not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^]
+for more details. When the cluster is created, you see an output similar to the following:
 
 [source, role="no_copy"]
 ```
