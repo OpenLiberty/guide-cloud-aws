@@ -233,14 +233,18 @@ use the `.war` file to build a Docker image. The projects are setup such that th
 as a part of a single Maven build. It is created by using the `dockerfile-maven` plug-in. The plug-in automatically
 picks up the Dockerfile that is located in the same directory as its POM file and builds a Docker image from it.
 
-****
-[system]#*{win}*#
+[.tab_link]
+[.windows_link]
+`*WINDOWS*`
 
+[.tab_content]
+[.windows_section]
+--
 On the Docker Desktop General Setting page, ensure that the option `Expose daemon on 
 tcp://localhost:2375 without TLS` is enabled. This configuration is required by the `dockerfile-maven` 
 part of the build.
 
-****
+--
 
 Navigate to the `start` directory and run the following command:
 
