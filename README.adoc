@@ -477,7 +477,7 @@ mvn verify -Ddockerfile.skip=true -Dcluster.ip=[hostname]
 
 The `dockerfile.skip` parameter is set to `true` to skip building a new container image.
 
-If the tests pass, you see an output for each servive similar to the following:
+If the tests pass, you see an output for each service similar to the following:
 
 [source, role="no_copy"]
 ----
