@@ -597,6 +597,9 @@ Events:
 
 == Tearing down the environment
 
+It is important to clean up your resources when you are finished with the guide so that 
+you do not incur additional charges for ongoing service.
+
 When you no longer need your deployed microservices, you can delete all {kube} resources 
 by running the `kubectl delete` command:
 [role='command']
