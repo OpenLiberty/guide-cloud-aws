@@ -477,7 +477,7 @@ mvn verify -Ddockerfile.skip=true -Dcluster.ip=[hostname]
 
 The `dockerfile.skip` parameter is set to `true` to skip building a new container image.
 
-If the tests pass, you see an output for each servive similar to the following:
+If the tests pass, you see an output for each service similar to the following:
 
 [source, role="no_copy"]
 ----
@@ -596,6 +596,9 @@ Events:
 // =================================================================================================
 
 == Tearing down the environment
+
+It is important to clean up your resources when you are finished with the guide so that 
+you do not incur additional charges for ongoing service.
 
 When you no longer need your deployed microservices, you can delete all {kube} resources 
 by running the `kubectl delete` command:
