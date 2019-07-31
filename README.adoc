@@ -226,7 +226,7 @@ The starting Java project, which you can find in the `start` directory, is a mul
 project. It is made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
 `start/system` and `start/inventory`. Both of these directories contain a Dockerfile, which is necessary
 for building the Docker images. If you're unfamiliar with Dockerfiles, check out the
-https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide.
+https://openliberty.io/guides/containerize.html[Containerizing microservices^] guide.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
 use the `.war` file to build a Docker image. The projects are setup such that this process is automated
