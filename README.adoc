@@ -467,10 +467,10 @@ file are:
 [cols="15, 100", options="header"]
 |===
 | *Property*                      | *Description*
-| [hotspot=35]`cluster.ip`        | IP or hostname for your cluster
-| [hotspot=36]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=37]`system.node.port`    | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=38]`inventory.node.port`    | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=34]`cluster.ip`        | IP or hostname for your cluster
+| [hotspot=35]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=36]`system.node.port`    | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=37]`inventory.node.port`    | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Use the following command to run the integration tests against your cluster. Substitute 
