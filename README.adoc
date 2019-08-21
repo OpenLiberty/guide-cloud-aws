@@ -242,16 +242,22 @@ part of the build.
 
 ****
 
-Navigate to the `start` directory and run the following command:
+To build these microservices, navigate to the `start` directory and run the following command:
 
 [role=command]
 ```
 mvn package
 ```
 
-The `package` goal automatically starts the `dockerfile-maven:build` goal. It runs during the
-`package` phase. This goal builds a Docker image from the Dockerfile that is located in the same directory
-as the POM file.
+Next, run the `docker build` commands to build container images for your application:
+[role='command']
+```
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+```
+
+The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. 
+The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
 During the build, you see various Docker messages that describe what images are being downloaded and
 built. When the build finishes, run the following command to list all local Docker images:
@@ -461,10 +467,10 @@ file are:
 [cols="15, 100", options="header"]
 |===
 | *Property*                      | *Description*
-| [hotspot=35]`cluster.ip`        | IP or hostname for your cluster
-| [hotspot=36]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=37]`system.node.port`    | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=38]`inventory.node.port`    | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=34]`cluster.ip`        | IP or hostname for your cluster
+| [hotspot=35]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=36]`system.node.port`    | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=37]`inventory.node.port`    | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Use the following command to run the integration tests against your cluster. Substitute 
@@ -511,19 +517,16 @@ Optionally, you might want to make changes to your microservice and learn how to
 the updated version of your microservice. In this section, you will bump the version of 
 the `system` microservice to `2.0-SNAPSHOT` and redeploy the new version of the microservice.
 
-The tag for the container image depends on the version that is specified in the pom.xml file. 
-Use the following Maven command to bump the version of the microservice to `2.0-SNAPSHOT`:
-
-[role=command]
-```
-mvn versions:set -DnewVersion=2.0-SNAPSHOT
-```
-
-Use Maven to repackage your microservice and build the new version of the container image:
-
+Use Maven to repackage your microservice:
 [role=command]
 ```
 mvn package
+```
+
+Next, build the new version of the container image as `2.0-SNAPSHOT`:
+[role=command]
+```
+docker build -t system:2.0-SNAPSHOT system/.
 ```
 
 Since you built a new image, it must be pushed to the `awsguide/system` repository
