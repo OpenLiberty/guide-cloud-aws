@@ -50,10 +50,9 @@ deploying, managing, and scaling containerized applications. If you would like t
 more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
 guide.
 
-There are different cloud-based solutions for running your workloads in a {kube} cluster. 
-A cloud-based infrastructure enables you to focus on developing your microservices without 
-worrying about details related to the servers you deploy them to. Using a cloud helps 
-you to easily scale and serve your microservices in a high-availability setup.
+There are different cloud-based solutions for running your Kubernetes workloads.
+A cloud-based infrastructure enables you to focus on developing your microservices without worrying about low-level infrastructure details for deployment. Using a cloud helps
+you to easily scale and manage your microservices in a high-availability setup.
 
 Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon Elastic Container
 Service for {kube} (EKS). EKS simplifies the process of running Kubernetes on AWS without 
