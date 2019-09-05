@@ -7,36 +7,26 @@ set -euxo pipefail
 ##
 ##############################################################################
 
-printf "\nmvn -q package\n"
 mvn -q package
 
-printf "\replacing containers in kubernetes.yaml\n"
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
 sed -i 's/\[inventory-repository-uri\]/inventory/g' kubernetes.yaml
 sed -i 's/\[system-repository-uri\]/system/g' kubernetes.yaml
 
-printf "\nkubectl apply -f kubernetes.yaml\n"
 kubectl apply -f kubernetes.yaml
 
-printf "\nsleep 120\n"
 sleep 120
 
-printf "\nkubectl get pods\n"
 kubectl get pods
 
-printf "\nminikube ip\n"
 echo `minikube ip`
 
-printf "\ncurl http://`minikube ip`:31000/system/properties\n"
 curl http://`minikube ip`:31000/system/properties
-
-printf "\ncurl http://`minikube ip`:32000/inventory/systems/system-service\n"
 curl http://`minikube ip`:32000/api/inventory/systems/system-service
 
-printf "\nmvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`\n"
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 
-printf "\nkubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)\n"
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
-
-printf "\nkubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)\n" 
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
