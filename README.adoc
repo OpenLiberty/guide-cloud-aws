@@ -227,20 +227,6 @@ project. It is made up of the `system` and `inventory` microservices. Each micro
 for building the Docker images. If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/containerize.html[Containerizing microservices^] guide.
 
-If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
-use the `.war` file to build a Docker image. The projects are setup such that this process is automated
-as a part of a single Maven build. It is created by using the `dockerfile-maven` plug-in. The plug-in automatically
-picks up the Dockerfile that is located in the same directory as its POM file and builds a Docker image from it.
-
-****
-[system]#*{win}*#
-
-On the Docker Desktop General Setting page, ensure that the option `Expose daemon on 
-tcp://localhost:2375 without TLS` is enabled. This configuration is required by the `dockerfile-maven` 
-part of the build.
-
-****
-
 To build these microservices, navigate to the `start` directory and run the following command:
 
 [role=command]
