@@ -453,7 +453,7 @@ file are:
 |===
 | *Property*                      | *Description*
 | [hotspot=cluster]`cluster.ip`        | IP or hostname for your cluster
-| [hotspot=system-kube-service]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system-service]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
 | [hotspot=system-node-port]`system.node.port`    | The NodePort of the {kube} Service `system-service`, 31000 by default.
 | [hotspot=inventory-node-port]`inventory.node.port`    | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
