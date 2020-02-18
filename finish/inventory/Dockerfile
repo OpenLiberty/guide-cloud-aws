@@ -1,3 +1,21 @@
 FROM open-liberty
 
-ADD --chown=1001:0 target/inventory.tar.gz /opt/ol
+ARG VERSION=1.0
+ARG REVISION=SNAPSHOT
+LABEL \
+  org.opencontainers.image.authors="Andrew Deschenes" \
+  org.opencontainers.image.vendor="Open Liberty" \
+  org.opencontainers.image.url="local" \
+  org.opencontainers.image.source="https://github.com/OpenLiberty/guide-containerize" \
+  org.opencontainers.image.version="$VERSION" \
+  org.opencontainers.image.revision="$REVISION" \
+  vendor="Open Liberty" \
+  name="inventory" \
+  version="$VERSION-$REVISION" \
+  summary="The system microservice from the AWS guide" \
+  description="This image contains the system microservice running with the Open Liberty runtime."
+
+COPY --chown=1001:0 src/main/liberty/config /config/
+COPY --chown=1001:0 target/inventory.war /config/apps
+
+RUN configure.sh 
