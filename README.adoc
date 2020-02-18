@@ -364,7 +364,7 @@ guide.
 kubernetes.yaml
 [source, yaml, linenums, role='code_column']
 ----
-include::finish/kubernetes.yaml[tags=**]
+include::finish/kubernetes.yaml[]
 ----
 [role="edit_command_text"]
 The [hotspot=18 hotspot=39]`image` is the name and tag of the container image that you want 
@@ -452,10 +452,10 @@ file are:
 [cols="15, 100", options="header"]
 |===
 | *Property*                      | *Description*
-| [hotspot=sysKubeService file=0]`system.ip` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=invKubeService file=0]`inventory.ip` | Name of the {kube} Service wrapping the `inventory` pods, `inventory-service` by default.
-| [hotspot=sysHttpPort file=0]`system.http.port`    | The HTTP port for the {kube} Service `system-service`, 9080 by default.
-| [hotspot=invHttpPort file=0]`inventory.http.port`    | The HTTP port of the {kube} Service `inventory-service`, 9081 by default.
+| [hotspot=sysKubeService]`system.ip` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=invKubeService]`inventory.ip` | Name of the {kube} Service wrapping the `inventory` pods, `inventory-service` by default.
+| [hotspot=sysHttpPort]`system.http.port`    | The HTTP port for the {kube} Service `system-service`, 9080 by default.
+| [hotspot=invHttpPort]`inventory.http.port`    | The HTTP port of the {kube} Service `inventory-service`, 9081 by default.
 |===
 
 Use the following command to run the integration tests against your cluster. Substitute 
