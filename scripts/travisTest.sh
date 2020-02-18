@@ -7,26 +7,30 @@ set -euxo pipefail
 ##
 ##############################################################################
 
-mvn -q package
+mvn -q clean package
 
-docker build -t system:1.0-SNAPSHOT system/.
-docker build -t inventory:1.0-SNAPSHOT inventory/.
+cd inventory
+mvn -q clean package liberty:create liberty:install-feature liberty:deploy
+mvn liberty:start
 
 sed -i 's/\[inventory-repository-uri\]/inventory/g' kubernetes.yaml
 sed -i 's/\[system-repository-uri\]/system/g' kubernetes.yaml
 
-kubectl apply -f kubernetes.yaml
+cd ../system
+mvn -q clean package liberty:create liberty:install-feature liberty:deploy
+mvn liberty:start
+
+cd ..
 
 sleep 120
 
-kubectl get pods
+curl http://localhost:9080/system/properties
+curl http://localhost:9081/inventory/systems/
 
-echo `minikube ip`
+mvn failsafe:integration-test -Dsystem.ip="localhost" -Dinventory.ip="localhost"
 
-curl http://`minikube ip`:31000/system/properties
-curl http://`minikube ip`:32000/api/inventory/systems/system-service
+cd inventory
+mvn liberty:stop
 
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
-
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+cd ../system
+mvn liberty:stop
