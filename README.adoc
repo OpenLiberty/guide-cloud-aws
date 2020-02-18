@@ -441,7 +441,7 @@ The second URL adds properties from `system-service` to the inventory.
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/inventory/pom.xml
+include::finish/inventory/pom.xml[]
 ----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
