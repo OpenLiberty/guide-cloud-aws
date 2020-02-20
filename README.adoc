@@ -15,7 +15,7 @@
 :page-tags: ['Kubernetes', 'Docker', 'Cloud']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['kubernetes-intro', 'kubernetes-microprofile-config', 'kubernetes-microprofile-health', 'istio-intro']
-:common-includes: ../guides-common/
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
 :page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using Amazon Elastic Container Registry (ECR) as a private container registry.
@@ -442,7 +442,6 @@ pom.xml
 [source, xml, linenums, role='code_column']
 ----
 include::finish/inventory/pom.xml[]
-----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
