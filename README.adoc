@@ -17,8 +17,8 @@
 :page-related-guides: ['kubernetes-intro', 'kubernetes-microprofile-config', 'kubernetes-microprofile-health', 'istio-intro']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-:page-seo-title: Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
-:page-seo-description: A tutorial on how to deploy microservices to Amazon EKS using Amazon Elastic Container Registry (ECR) as a private container registry.
+:page-seo-title: Deploying Java microservices on Amazon Web Services (AWS) with Kubernetes
+:page-seo-description: A getting started tutorial with examples on how to deploy Java microservices to Amazon Elastic Container Service for Kubernetes (EKS) using Amazon Elastic Container Registry (ECR) as a private container registry.
 :guide-author: Open Liberty
 = Deploying microservices to Amazon Web Services
 
