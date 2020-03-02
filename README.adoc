@@ -457,7 +457,7 @@ file are:
 | [hotspot=invKubeService]`inventory.ip` | Name of the {kube} Service wrapping the `inventory` pods, `inventory-service` by default.
 | [hotspot=sysHttpPort]`system.http.port`    | The HTTP port for the {kube} Service `system-service`, 9080 by default.
 | [hotspot=invHttpPort]`inventory.http.port`    | The HTTP port of the {kube} Service `inventory-service`, 9081 by default.
-|==
+|===
 
 Use the following command to run the integration tests against your cluster. Substitute 
 `[hostname]` with the appropriate value:
