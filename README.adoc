@@ -90,18 +90,16 @@ documentation for information about downloading and setting up `kubectl` on your
 
 - *IAM Authenticator:* To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
 IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
-instructions to install the AWS IAM Authenticator on your platform.. 
+instructions to install the AWS IAM Authenticator on your platform. 
 
-- *eksctl:* In this guide, you will use the `eksctl` CLI tool for provisioning your EKS cluster. 
+- *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. 
 Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and 
 download the latest stable release. Extract the archive and add the directory with the 
 extracted files to your path.
 
 - *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). To install
 the AWS CLI, Python must be installed. See the https://www.python.org/downloads/[Downloading Python^] 
-documentation to download the latest version of Python.
-
-After Python is installed, install the AWS CLI by following the instructions in the official
+documentation to download the latest version of Python. After Python is installed, install the AWS CLI by following the instructions in the official
 https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html[Installing the AWS CLI^]
 documentation. 
 
@@ -235,7 +233,7 @@ To build these microservices, navigate to the `start` directory and run the foll
 mvn package
 ```
 
-Next, run the `docker build` commands to build container images for your application:
+Next, run the `docker build` commands to build the container images for your application:
 [role='command']
 ```
 docker build -t system:1.0-SNAPSHOT system/.
@@ -273,7 +271,7 @@ build log for any potential errors.
 === Pushing the images to a container registry
 
 Pushing the images to a registry allows the cluster to create pods by using your container images. 
-The registry that you use is called Amazon Elastic Container Registry (ECR).
+The registry that you are using is called Amazon Elastic Container Registry (ECR).
 
 First, you must authenticate your Docker client to your ECR registry. Start by running the
 `get-login` command:
