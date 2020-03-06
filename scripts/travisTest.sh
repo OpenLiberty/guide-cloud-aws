@@ -16,6 +16,8 @@ mvn liberty:start
 sed -i 's/\[inventory-repository-uri\]/inventory/g' kubernetes.yaml
 sed -i 's/\[system-repository-uri\]/system/g' kubernetes.yaml
 
+kubectl apply -f kubernetes.yaml
+
 cd ../system
 mvn -q clean package liberty:create liberty:install-feature liberty:deploy
 mvn liberty:start
