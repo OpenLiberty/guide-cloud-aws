@@ -280,7 +280,6 @@ First, you must authenticate your Docker client to your ECR registry. Start by r
 get-login-password
 ```
 
-If you see `Unknown options: --no-include-email`, update your AWS CLI to the latest version. 
 The `get-login` command returns a `docker login` command similar to the following:
 [source, role="no_copy"]
 ```
