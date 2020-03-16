@@ -450,11 +450,9 @@ file are:
 
 [cols="15, 100", options="header"]
 |===
-| *Property*                      | *Description*
-| [hotspot=sysKubeService]`system.ip` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=invKubeService]`inventory.ip` | Name of the {kube} Service wrapping the `inventory` pods, `inventory-service` by default.
-| [hotspot=sysHttpPort]`system.http.port`    | The HTTP port for the {kube} Service `system-service`, 9080 by default.
-| [hotspot=invHttpPort]`inventory.http.port`    | The HTTP port of the {kube} Service `inventory-service`, 9081 by default.
+| *Property*                                            | *Description*
+| [hotspot=systemIP]`system.ip`                         | IP or hostname of the `system-service` {kube} Service
+| [hotspot=inventoryIP]`inventory.ip`                   | IP or hostname of the `inventory-service` {kube} Service
 |===
 
 Use the following command to run the integration tests against your cluster. Substitute 
@@ -469,6 +467,7 @@ If the tests pass, you see an output for each service similar to the following:
 
 [source, role="no_copy"]
 ----
+
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------

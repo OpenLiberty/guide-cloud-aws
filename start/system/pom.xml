@@ -21,11 +21,12 @@
         <version.maven-failsafe-plugin>2.22.2</version.maven-failsafe-plugin>
         <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
+        <!-- OpenLiberty runtime -->
+        <http.port>9080</http.port>
+        <https.port>9443</https.port>
         <!-- Default test properties -->
-        <system.ip>system-service</system.ip>
-        <!-- Liberty configuration -->
-        <liberty.var.default.http.port>9080</liberty.var.default.http.port>
-        <liberty.var.default.https.port>9443</liberty.var.default.https.port>
+        <system.ip>localhost:9090</system.ip>
+        <inventory.ip>localhost:9080</inventory.ip>
     </properties>
 
     <!-- Provided dependancies -->
@@ -78,17 +79,19 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
             </plugin>
-            <!-- Plugin to run functional tests -->
+            <!-- Plugin to run integration tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${version.maven-failsafe-plugin}</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <system.ip>${system.ip}</system.ip>
-                        <system.http.port>${liberty.var.default.http.port}</system.http.port>
-                    </systemPropertyVariables>
-                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -21,24 +21,12 @@
         <version.maven-failsafe-plugin>2.22.2</version.maven-failsafe-plugin>
         <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
+        <!-- OpenLiberty runtime -->
+        <http.port>9080</http.port>
+        <https.port>9443</https.port>
         <!-- Default test properties -->
-        <!-- tag::sysHttpPort[] -->
-        <system.http.port>9080</system.http.port>
-        <!-- end::sysHttpPort[] -->
-        <!-- tag::invHttpPort[] -->
-        <inventory.http.port>9081</inventory.http.port>
-        <!-- end::invHttpPort[] -->
-        <inventory.https.port>9444</inventory.https.port>
-        <!-- tag::sysKubeService[] -->
-        <system.ip>system-service</system.ip>
-        <!-- end::sysKubeService[] -->
-        <!-- tag::invKubeService[] -->
-        <inventory.ip>inventory-service</inventory.ip>
-        <!-- end::invKubeService[] -->
-        <!-- Liberty configuration -->
-        <liberty.var.system.http.port>${system.http.port}</liberty.var.system.http.port>
-        <liberty.var.default.http.port>${inventory.http.port}</liberty.var.default.http.port>
-        <liberty.var.default.https.port>${inventory.https.port}</liberty.var.default.https.port>
+        <system.ip>localhost:9090</system.ip>
+        <inventory.ip>localhost:9080</inventory.ip>
     </properties>
 
      <!-- Provided dependencies -->
@@ -97,19 +85,19 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
             </plugin>
-            <!-- Plugin to run functional tests -->
+            <!-- Plugin to run integration tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${version.maven-failsafe-plugin}</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <system.ip>${system.ip}</system.ip>
-                        <inventory.ip>${inventory.ip}</inventory.ip>
-                        <system.http.port>${system.http.port}</system.http.port>
-                        <inventory.http.port>${inventory.http.port}</inventory.http.port>
-                    </systemPropertyVariables>
-                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
