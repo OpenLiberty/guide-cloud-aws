@@ -275,7 +275,7 @@ First, you must authenticate your Docker client to your ECR registry. Start by r
 `get-login` command:
 [role=command]
 ```
-get-login-password
+aws ecr get-login-password
 ```
 
 The `get-login` command returns a `docker login` command similar to the following:
