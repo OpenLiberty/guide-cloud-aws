@@ -13,6 +13,7 @@
 package it.io.openliberty.guides.system;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
@@ -71,13 +72,6 @@ public class SystemEndpointIT {
             "Container name should not be null but it was. The service is probably not running inside a container");
     }
 
-    private void assertResponse(String clusterUrl2, Response response2) {
-    }
-
-    private Response getResponse(String clusterUrl2) {
-        return null;
-    }
-
     @Test
     @Order(2)
     public void testGetProperties() {
@@ -89,5 +83,18 @@ public class SystemEndpointIT {
 
         assertEquals(200, response.getStatus(), "Incorrect response code from " + clusterUrl);
         response.close();
+    }
+
+    private Response getResponse(String url) {
+        return client
+            .target(url)
+            .request()
+            .header("Host", System.getProperty("host-header"))
+            .get();
+    }
+
+    private void assertResponse(String url, Response response) {
+        assertEquals(200, response.getStatus(),
+            "Incorrect response code from " + url);
     }
 }
