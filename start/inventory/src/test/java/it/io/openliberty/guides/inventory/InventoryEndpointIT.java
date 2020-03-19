@@ -65,7 +65,7 @@ public class InventoryEndpointIT {
     }
 
     @AfterAll
-    public void teardown() {
+    public static void teardown() {
         client.close();
     }
 
