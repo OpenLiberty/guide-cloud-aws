@@ -30,7 +30,6 @@
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
     </properties>
-    </properties>
 
     <!-- Provided dependencies -->
     <dependencies>
