@@ -289,7 +289,7 @@ The `[aws_account_id]` is a unique 12-digit ID that is assigned to every AWS acc
 will notice this ID in the output from various commands because AWS uses it to differentiate 
 your resources from other accounts. 
 
-Replace the `[password_string]` and the `[aws_account_id]` the following 
+Replace the `[password_string]` and the `[aws_account_id]` in the following 
 `docker login` command, that is used to authenticate your Docker client. 
 
 [role=command]
