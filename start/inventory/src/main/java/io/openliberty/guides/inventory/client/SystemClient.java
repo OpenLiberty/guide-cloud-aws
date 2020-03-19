@@ -35,7 +35,7 @@ public class SystemClient {
   private final String PROTOCOL = "http";
 
   @Inject
-  @ConfigProperty(name = "system.http.port")
+  @ConfigProperty(name = "default.http.port")
   String DEFAULT_PORT;
 
   // Wrapper function that gets properties
