@@ -164,7 +164,7 @@ profile is used.
 You can verify your current configuration values by running the following command: 
 [role=command]
 ```
-`aws configure list`. 
+aws configure list
 ```
 
 // =================================================================================================
