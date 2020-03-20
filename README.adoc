@@ -412,6 +412,8 @@ the security group to allow incoming traffic through ports `31000` and `32000`. 
 aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-nodegroup*"  --query "SecurityGroups[*].{Name:GroupName,ID:GroupId}"
 ```
 
+You will see an output similar to the following:
+
 [source, role="no_copy"]
 ```
 [
