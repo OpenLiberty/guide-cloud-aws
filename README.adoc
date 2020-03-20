@@ -133,23 +133,23 @@ Before you can deploy your microservices, you must create a {kube} cluster.
 
 === Configuring the AWS CLI
 
-After the AWS CLI is installed, it must be configured by running the AWS configure command. 
 Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM)
 user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^]
 users dashboard and create a user through the UI. While creating a user, you must give the 
 user `programmatic access` when selecting the AWS access type. You will also be prompted
 to add the user to a group. A group allows you to specify permissions for multiple users. 
 If you do not have an existing group, you need to create a new one. Be sure to take note
-of the `AWS Access Key ID` and `AWS Secret Access Key`.
+of the `AWS Access Key ID` and `AWS Secret Access Key`. After the AWS CLI is installed, it 
+must be configured by running the AWS configure command. 
+
+You will be prompted for several pieces of information, including an `AWS Access Key ID` 
+and an `AWS Secret Access Key`. These keys are associated with the AWS Identity and Access
+Management (IAM) user that you created.
 
 [role=command]
 ```
 aws configure
 ```
-
-You will be prompted for several pieces of information, including an `AWS Access Key ID` 
-and an `AWS Secret Access Key`. These keys are associated with the AWS Identity and Access
-Management (IAM) user that you created.
 
 Next, you will be prompted to enter a region. This region will be the region of the servers where
 your requests are sent. Select the region that is closest to you. For a full list of regions, 
@@ -160,6 +160,12 @@ Finally, enter `json` when you are prompted to enter the output format.
 After you are done filling out this information, the settings are stored in the default 
 profile. Anytime that you run an AWS CLI command without specifying a profile, the default 
 profile is used. 
+
+You can verify your current configuration values by running the following command: 
+[role=command]
+```
+`aws configure list`. 
+```
 
 // =================================================================================================
 // Provisioning a cluster
@@ -282,19 +288,19 @@ Next, running the following will return the `[aws_account_id]` needed to authent
 
 [role=command]
 ```
-aws sts get-caller-identity --output text --query 'Account'
+aws sts get-caller-identity --output text --query "Account"
 ```
 
 The `[aws_account_id]` is a unique 12-digit ID that is assigned to every AWS account. You 
 will notice this ID in the output from various commands because AWS uses it to differentiate 
 your resources from other accounts. 
 
-Replace the `[password_string]` and the `[aws_account_id]` in the following 
-`docker login` command, that is used to authenticate your Docker client. 
+Replace the `[password_string]`, `[aws_account_id]` and the `[region]` your account is configured 
+under in the following `docker login` command, that is used to authenticate your Docker client. 
 
 [role=command]
 ```
-docker login -u AWS -p [password_string] https://[aws_account_id].dkr.ecr.us-east-2.amazonaws.com
+docker login -u AWS -p [password_string] https://[aws_account_id].dkr.ecr.[region].amazonaws.com
 ```
 
 Next, make a repository to store the `system` and `inventory` images:
@@ -312,9 +318,9 @@ You will see an output similar to the following:
     "repository": {
         "registryId": "[aws_account_id]",
         "repositoryName": "awsguide/system",
-        "repositoryArn": "arn:aws:ecr:us-east-2:[aws_account_id]:repository/awsguide/system",
+        "repositoryArn": "arn:aws:ecr:[region]:[aws_account_id]:repository/awsguide/system",
         "createdAt": 1553111916.0,
-        "repositoryUri": "[aws_account_id].ecr.us-east-2.amazonaws.com/awsguide/system"
+        "repositoryUri": "[aws_account_id].ecr.[region].amazonaws.com/awsguide/system"
     }
 }
 ```
@@ -405,6 +411,17 @@ the security group to allow incoming traffic through ports `31000` and `32000`. 
 ```
 aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-nodegroup*"  --query "SecurityGroups[*].{Name:GroupName,ID:GroupId}"
 ```
+
+[source, role="no_copy"]
+```
+[
+    {
+        "Name": "eksctl-guide-cluster-nodegroup-ng-c003308d-SG-1TTGEJ5JUMCI3",
+        "ID": "sg-014ab382e82217bfc"
+    }
+]
+```
+
 
 Then, add the following rules to the security group to allow incoming traffic through ports
 `31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `ID` in the
