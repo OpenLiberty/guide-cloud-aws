@@ -26,7 +26,8 @@ echo `minikube ip`
 curl http://`minikube ip`:31000/system/properties
 curl http://`minikube ip`:32000/api/inventory/systems/system-service
 
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
+mvn failsafe:integration-test -Dcluster.ip=`minikube ip`
+mvn failsafe:verify
 
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
 kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
