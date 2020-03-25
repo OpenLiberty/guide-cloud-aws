@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018 IBM Corporation and others.
+ * Copyright (c) 2018, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,46 +12,46 @@
 // end::copyright[]
 package it.io.openliberty.guides.inventory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import javax.json.JsonObject;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
-import javax.json.JsonObject;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-public class InventoryEndpointTest {
+@TestMethodOrder(OrderAnnotation.class)
+public class InventoryEndpointIT {
 
     private static String invUrl;
     private static String sysUrl;
     private static String sysKubeService;
+    private static Client client;
 
-    private Client client;
     private Response response;
 
-    @BeforeClass
+    @BeforeAll
     public static void oneTimeSetup() {
         String clusterIp = System.getProperty("cluster.ip");
         String invNodePort = System.getProperty("inventory.node.port");
         String sysNodePort = System.getProperty("system.node.port");
-        
+
         sysKubeService = System.getProperty("system.kube.service");
+
         invUrl = "http://" + clusterIp + ":" + invNodePort + "/inventory/systems/";
         sysUrl = "http://" + clusterIp + ":" + sysNodePort + "/system/properties/";
-    }
 
-    @Before
-    public void setup() {
-        response = null;
         client = ClientBuilder.newBuilder()
                     .hostnameVerifier(new HostnameVerifier() {
                         public boolean verify(String hostname, SSLSession session) {
@@ -64,23 +64,15 @@ public class InventoryEndpointTest {
         client.target(invUrl + "reset").request().post(null);
     }
 
-    @After
-    public void teardown() {
+    @AfterAll
+    public static void teardown() {
         client.close();
     }
 
     // tag::tests[]
     // tag::testSuite[]
     @Test
-    public void testSuite() {
-        this.testEmptyInventory();
-        this.testHostRegistration();
-        this.testSystemPropertiesMatch();
-        this.testUnknownHost();
-    }
-    // end::testSuite[]
-
-    // tag::testEmptyInventory[]
+    @Order(1)
     public void testEmptyInventory() {
         Response response = this.getResponse(invUrl);
         this.assertResponse(invUrl, response);
@@ -89,14 +81,14 @@ public class InventoryEndpointTest {
 
         int expected = 0;
         int actual = obj.getInt("total");
-        assertEquals("The inventory should be empty on application start but it wasn't",
-                    expected, actual);
+        assertEquals(expected, actual,
+        "The inventory should be empty on application start but it wasn't");
 
         response.close();
     }
-    // end::testEmptyInventory[]
-
-    // tag::testHostRegistration[]
+    
+    @Test
+    @Order(2)
     public void testHostRegistration() {
         this.visitSystemService();
 
@@ -107,20 +99,21 @@ public class InventoryEndpointTest {
 
         int expected = 1;
         int actual = obj.getInt("total");
-        assertEquals("The inventory should have one entry for " + sysKubeService, expected,
-                    actual);
+        assertEquals(expected, actual,
+                "The inventory should have one entry for the system service:"
+                    + sysKubeService);
 
         boolean serviceExists = obj.getJsonArray("systems").getJsonObject(0)
                                     .get("hostname").toString()
                                     .contains(sysKubeService);
-        assertTrue("A host was registered, but it was not " + sysKubeService,
-                serviceExists);
+        assertTrue(serviceExists,
+                "A host was registered, but it was not " + sysKubeService);
 
         response.close();
     }
-    // end::testHostRegistration[]
-
-    // tag::testSystemPropertiesMatch[]
+    
+    @Test
+    @Order(3)
     public void testSystemPropertiesMatch() {
         Response invResponse = this.getResponse(invUrl);
         Response sysResponse = this.getResponse(sysUrl);
@@ -148,9 +141,9 @@ public class InventoryEndpointTest {
         invResponse.close();
         sysResponse.close();
     }
-    // end::testSystemPropertiesMatch[]
-
-    // tag::testUnknownHost[]
+    
+    @Test
+    @Order(4)
     public void testUnknownHost() {
         Response response = this.getResponse(invUrl);
         this.assertResponse(invUrl, response);
@@ -162,75 +155,33 @@ public class InventoryEndpointTest {
         String obj = badResponse.readEntity(String.class);
 
         boolean isError = obj.contains("ERROR");
-        assertTrue("badhostname is not a valid host but it didn't raise an error",
-                isError);
+        assertTrue(isError,
+                "badhostname is not a valid host but it didn't raise an error");
 
         response.close();
         badResponse.close();
     }
 
-    // end::testUnknownHost[]
-    // end::tests[]
-    // tag::helpers[]
-    // tag::javadoc[]
-    /**
-     * <p>
-     * Returns response information from the specified URL.
-     * </p>
-     * 
-     * @param url
-     *          - target URL.
-     * @return Response object with the response from the specified URL.
-     */
-    // end::javadoc[]
+    // Returns response information from the specified URL.
     private Response getResponse(String url) {
         return client.target(url).request().get();
     }
 
-    // tag::javadoc[]
-    /**
-     * <p>
-     * Asserts that the given URL has the correct response code of 200.
-     * </p>
-     * 
-     * @param url
-     *          - target URL.
-     * @param response
-     *          - response received from the target URL.
-     */
-    // end::javadoc[]
+    // Asserts that the given URL has the correct response code of 200.
     private void assertResponse(String url, Response response) {
-        assertEquals("Incorrect response code from " + url, 200,
-                    response.getStatus());
+        assertEquals(200, response.getStatus(), "Incorrect response code from " + url);
     }
 
-    // tag::javadoc[]
-    /**
-     * Asserts that the specified JVM system property is equivalent in both the
-     * system and inventory services.
-     * 
-     * @param propertyName
-     *          - name of the system property to check.
-     * @param hostname
-     *          - name of JVM's host.
-     * @param expected
-     *          - expected name.
-     * @param actual
-     *          - actual name.
-     */
-    // end::javadoc[]
+    // Asserts that the specified JVM system property is equivalent in both the
+    // system and inventory services.
     private void assertProperty(String propertyName, String hostname,
         String expected, String actual) {
-        assertEquals("JVM system property [" + propertyName + "] "
+        assertEquals(expected, actual, "JVM system property [" + propertyName + "] "
             + "in the system service does not match the one stored in "
-            + "the inventory service for " + hostname, expected, actual);
+            + "the inventory service for " + hostname);
     }
 
-    // tag::javadoc[]
-    /**
-     * Makes a simple GET request to inventory/localhost.
-     */
-    // end::javadoc[]
+    // Makes a simple GET request to inventory/localhost.
     private void visitSystemService() {
         Response response = this.getResponse(sysUrl);
         this.assertResponse(sysUrl, response);
