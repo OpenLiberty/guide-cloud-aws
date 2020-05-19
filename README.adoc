@@ -236,6 +236,8 @@ To build these microservices, navigate to the `start` directory and run the foll
 mvn package
 ```
 
+include::{common-includes}/ol-kernel-docker-pull.adoc[]
+
 Next, run the `docker build` commands to build the container images for your application:
 [role='command']
 ```
