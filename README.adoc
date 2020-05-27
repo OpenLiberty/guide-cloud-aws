@@ -263,7 +263,7 @@ Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are li
 REPOSITORY                                              TAG
 system                                                  1.0-SNAPSHOT
 inventory                                               1.0-SNAPSHOT
-openliberty/open-liberty:kernel-java8-openj9-ubi        latest
+openliberty/open-liberty                                kernel-java8-openj9-ubi        
 ----
 
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
