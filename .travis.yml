@@ -17,6 +17,10 @@ script:
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
 - ../scripts/travisTest.sh
+after_script:
+- docker images
+- if [[ "$TRAVIS_TEST_RESULT" == "0" ]]; then RESULT="passed"; else RESULT="failed"; fi
+- echo -e "\033[1;34m result:\033[0m\033[1;36m $RESULT \033[0m \n"
 branches:
   only:
   - master
