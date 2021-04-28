@@ -79,24 +79,24 @@ inside a cluster.
 
 Before you begin, the following additional tools need to be installed:
 
-- *Docker:* You need a containerization software for building containers. Kubernetes 
+* *Docker:* You need a containerization software for building containers. Kubernetes 
 supports various container types, but you will use Docker in this guide. For installation 
 instructions, refer to the official https://docs.docker.com/install/[Docker^] documentation.
 
-- *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your 
+* *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your 
 Kubernetes cluster. See the official https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install and Set Up kubectl^]
 documentation for information about downloading and setting up `kubectl` on your platform.
 
-- *IAM Authenticator:* To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
+* *IAM Authenticator:* To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
 IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
 instructions to install the AWS IAM Authenticator on your platform. 
 
-- *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. 
+* *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. 
 Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and 
 download the latest stable release. Extract the archive and add the directory with the 
 extracted files to your path.
 
-- *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). AWS CLI Version 2 is the release of the AWS CLI that is intended for use in production environments, and the version that should be used in this guide. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official
+* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). AWS CLI Version 2 is the release of the AWS CLI that is intended for use in production environments, and the version that should be used in this guide. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official
 https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^]
 documentation. 
 
@@ -450,8 +450,8 @@ kubectl get nodes -o wide
 Then, `curl` or visit the following URLs to access your microservices, substituting the 
 appropriate hostname:
 
-- `{system-api}`
-- `{inventory-api}/system-service`
+* `{system-api}`
+* `{inventory-api}/system-service`
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you can use the `-I` option in the `curl` when you make a request to `{system-api}`.
