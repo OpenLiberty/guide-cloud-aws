@@ -19,7 +19,7 @@ sleep 120
 
 kubectl get pods
 
-echo "$(minikube ip)"
+minikube ip
 
 curl "http://$(minikube ip):31000/system/properties"
 curl "http://$(minikube ip):32000/api/inventory/systems/system-service"
@@ -27,8 +27,8 @@ curl "http://$(minikube ip):32000/api/inventory/systems/system-service"
 mvn failsafe:integration-test "-Dcluster.ip=$(minikube ip)"
 mvn failsafe:verify
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
+kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
 
 # Clear .m2 cache
 rm -rf ~/.m2
