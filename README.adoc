@@ -59,7 +59,7 @@ Service for {kube} (EKS). EKS simplifies the process of running Kubernetes on AW
 needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
 cluster that you can deploy your microservices to. You will use EKS with Amazon Elastic 
 Container Registry (ECR). Amazon ECR is a private registry that is used to store 
-and distribute your container images. Note, since EKS is not free, there is a small
+and distribute your container images. Note, because EKS is not free, there is a small
 cost that is associated with running this guide. See the official
 https://aws.amazon.com/eks/pricing/[Amazon EKS pricing^] documentation for more details.
 
@@ -116,7 +116,7 @@ aws --version
 [role=command]
 include::{common-includes}/gitclone.adoc[]
 
-// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
+// no "try what you'll build" section in this guide because it would be too long due to all setup the user will have to do.
 
 
 // =================================================================================================
