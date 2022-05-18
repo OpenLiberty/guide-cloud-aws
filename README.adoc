@@ -203,10 +203,10 @@ Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are li
 
 [source, role="no_copy"]
 ----
-REPOSITORY                          TAG
-system                              1.0-SNAPSHOT
-inventory                           1.0-SNAPSHOT
-openliberty/open-liberty            full-java11-openj9-ubi        
+REPOSITORY                        TAG
+system                            1.0-SNAPSHOT
+inventory                         1.0-SNAPSHOT
+icr.io/appcafe/open-liberty       kernel-slim-java11-openj9-ubi       
 ----
 
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven build log for any potential errors.
