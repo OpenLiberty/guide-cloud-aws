@@ -499,21 +499,19 @@ Observe that in this case the `system` microservice is running in the pod called
 
 [role=command]
 ```
-kubectl describe pod [pod-name]
+kubectl get event --field-selector involvedObject.name=[pod-name]
 ```
 
 View the events at the bottom of the command's output. Notice that the pod is using the new container image `system:2.0-SNAPSHOT`.
 
 [source, role="no_copy"]
 ----
-Events:
-  Type    Reason     Age   From                                    Message
-  ----    ------     ----  ----                                    -------
-  Normal  Scheduled  1m    default-scheduler                       Successfully assigned default/system-deployment-dd44895f6-wmlkm to ip.us-east-2.compute.internal
-  Normal  Pulling    1m    kubelet, ip.us-east-2.compute.internal  pulling image "[aws_account_id].dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
-  Normal  Pulled     1m    kubelet, ip.us-east-2.compute.internal  Successfully pulled image "[aws_account_id].dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
-  Normal  Created    1m    kubelet, ip.us-east-2.compute.internal  Created container
-  Normal  Started    1m    kubelet, ip.us-east-2.compute.internal  Started container
+LAST SEEN   TYPE     REASON      OBJECT                                   MESSAGE
+97s         Normal   Scheduled   pod/system-deployment-56b4b765d4-9jz5l   Successfully assigned default/system-deployment-56b4b765d4-9jz5l to ip-192-168-85-136.us-east-2.compute.internal
+97s         Normal   Pulling     pod/system-deployment-56b4b765d4-9jz5l   Pulling image "208872073932.dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
+95s         Normal   Pulled      pod/system-deployment-56b4b765d4-9jz5l   Successfully pulled image "208872073932.dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT" in 1.082459294s
+95s         Normal   Created     pod/system-deployment-56b4b765d4-9jz5l   Created container system-container
+95s         Normal   Started     pod/system-deployment-56b4b765d4-9jz5l   Started container system-container
 ----
 
 // =================================================================================================
