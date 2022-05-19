@@ -335,23 +335,30 @@ inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 Before you can make a request to `[hostname]:31000` or `[hostname]:32000`, you must modify the security group to allow incoming traffic through ports `31000` and `32000`. To get the `group-id` of the security group, use the `aws ec2 describe-security-groups` command:
 [role=command]
 ```
-aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-*"  --query "SecurityGroups[*].{Name:GroupName,ID:GroupId}"
+aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-cluster-*" --query "SecurityGroups[*].IpPermissions[*].UserIdGroupPairs" --output text
 ```
 
 You will see an output similar to the following:
 
 [source, role="no_copy"]
 ```
-[
+...
     {
-        "Name": "eksctl-guide-cluster-nodegroup-ng-c003308d-SG-1TTGEJ5JUMCI3",
-        "ID": "sg-014ab382e82217bfc"
+        "Description": "Allow nodes to communicate with each other (all ports)",
+        "GroupId": "sg-035c858e1ff9c52f1",
+        "UserId": "208872073932"
+    },
+    {
+        "Description": "Allow managed and unmanaged nodes to communicate with each other (all ports)",
+        "GroupId": "sg-04a0c50049c10ae54",
+        "UserId": "208872073932"
     }
-]
+...
 ```
 
+Copy the value of the `GroupId` which description is "Allow managed and unmanaged nodes to communicate with each other (all ports)". In this example output, the value is `sg-04a0c50049c10ae54`.
 
-Then, add the following rules to the security group to allow incoming traffic through ports `31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `ID` in the output of the previous command.
+Then, add the following rules to the security group to allow incoming traffic through ports `31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `GroupId` in the output of the previous command.
 
 [role=command]
 ```
