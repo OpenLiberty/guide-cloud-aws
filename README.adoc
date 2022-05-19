@@ -335,7 +335,7 @@ inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 Before you can make a request to `[hostname]:31000` or `[hostname]:32000`, you must modify the security group to allow incoming traffic through ports `31000` and `32000`. To get the `group-id` of the security group, use the `aws ec2 describe-security-groups` command:
 [role=command]
 ```
-aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-cluster-*" --query "SecurityGroups[*].IpPermissions[*].UserIdGroupPairs" --output text
+aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-cluster-*" --query "SecurityGroups[*].IpPermissions[*].UserIdGroupPairs"
 ```
 
 You will see an output similar to the following:
