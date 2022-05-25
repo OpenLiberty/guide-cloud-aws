@@ -366,7 +366,7 @@ aws ec2 authorize-security-group-ingress --protocol tcp --port 31000 --group-id 
 aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id [security-group-id] --cidr 0.0.0.0/0
 ```
 
-After you are finished adding the inbound rules to the security group, you might need to wait a few minutes before you try to access the `system` and `inventory` microservices.
+After you finish adding the inbound rules to the security group, you might need to wait a few minutes before you try to access the `system` and `inventory` microservices.
 
 Take note of the `EXTERNAL-IP` in the output of the following command. It is the hostname you will later substitute into `[hostname]`: 
 [role=command]
