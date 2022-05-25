@@ -495,7 +495,7 @@ inventory-deployment-6fd959cc4-rf2m2   1/1       Running   0          7m
 system-deployment-677b9f5d9c-nqzcf     1/1       Running   0          7m
 ----
 
-Observe that in this case the `system` microservice is running in the pod called `system-deployment-677b9f5d9c-nqzcf`. Substitute the name of your pod into the following command to see more details about the pod:
+Observe that in this case, the `system` microservice is running in the pod called `system-deployment-677b9f5d9c-nqzcf`. Substitute the name of your pod into the following command to see more details about the pod:
 
 [role=command]
 ```
