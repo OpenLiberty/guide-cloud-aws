@@ -393,7 +393,7 @@ pom.xml
 include::finish/inventory/pom.xml[]
 ----
 
-A few tests are included for you to test the basic functionality of the microservices. If a test failure occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be in the ready state before you proceed further. The default properties that are defined in the [hotspot]`pom.xml` file are:
+A few tests are included for you to test the basic functionality of the microservices. If a test failure occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be in the ready state before you proceed further. The default properties defined in the [hotspot]`pom.xml` file are:
 
 [cols="15, 100", options="header"]
 |===
