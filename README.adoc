@@ -44,7 +44,7 @@ Explore how to deploy microservices to Amazon Elastic Container Service for Kube
 
 You will learn how to deploy two microservices in Open Liberty containers to a {kube} cluster on Amazon Elastic Container Service for Kubernetes (EKS). 
 
-Kubernetes is an open source container orchestrator that automates many tasks involved in deploying, managing, and scaling containerized applications. If you would like to learn more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^] guide.
+Kubernetes is an open-source container orchestrator that automates many tasks that are involved in deploying, managing, and scaling containerized applications. If you would like to learn more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^] guide.
 
 There are different cloud-based solutions for running your Kubernetes workloads. A cloud-based infrastructure enables you to focus on developing your microservices without worrying about low-level infrastructure details for deployment. Using a cloud helps you to easily scale and manage your microservices in a high-availability setup.
 
