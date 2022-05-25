@@ -548,7 +548,7 @@ eksctl delete cluster --name guide-cluster
 
 == Great work! You're done!
 
-You just deployed two microservices running in Open Liberty to AWS EKS. You also learned how to use `kubectl` to deploy your microservices on a {kube} cluster.
+You just deployed two microservices running in Open Liberty to AWS EKS. You also learned how to use the `kubectl` command to deploy your microservices on a {kube} cluster.
 
 // Multipane
 include::{common-includes}/attribution.adoc[subs="attributes"]
