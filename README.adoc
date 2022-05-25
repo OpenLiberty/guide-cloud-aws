@@ -61,7 +61,7 @@ The two microservices you will deploy are called `system` and `inventory`. The `
 
 Before you begin, the following additional tools need to be installed:
 
-* *Docker:* You need a containerization software for building containers. Kubernetes supports various container types, but you will use Docker in this guide. For installation instructions, refer to the official https://docs.docker.com/install/[Docker^] documentation.
+* *Docker:* You need containerization software for building containers. Kubernetes supports various container types, but you will use Docker in this guide. For installation instructions, refer to the official https://docs.docker.com/install/[Docker^] documentation.
 
 * *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your Kubernetes cluster. See the official https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install and Set Up kubectl^] documentation for information about downloading and setting up `kubectl` on your platform.
 
