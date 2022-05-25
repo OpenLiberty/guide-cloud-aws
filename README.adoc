@@ -104,7 +104,7 @@ Before you can deploy your microservices, you must create a {kube} cluster.
 
 === Configuring the AWS CLI
 
-Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM)user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^]users dashboard and create a user through the UI. While creating a user, you must give the user `programmatic access` when selecting the AWS access type. You will also be promptedto add the user to a group. A group allows you to specify permissions for multiple users. If you do not have an existing group, you need to create a new one. Be sure to take noteof the `AWS Access Key ID` and `AWS Secret Access Key`. After the AWS CLI is installed, it must be configured by running the AWS configure command. 
+Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM)user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^] users dashboard and create a user through the UI. While creating a user, you must give the user `programmatic access` when selecting the AWS access type. You will also be prompted to add the user to a group. A group allows you to specify permissions for multiple users. If you do not have an existing group, you need to create a new one. Be sure to take note of the `AWS Access Key ID` and `AWS Secret Access Key`. After the AWS CLI is installed, it must be configured by running the AWS configure command. 
 
 You will be prompted for several pieces of information, including an `AWS Access Key ID` and an `AWS Secret Access Key`. These keys are associated with the AWS Identity and AccessManagement (IAM) user that you created.
 
