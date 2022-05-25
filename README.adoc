@@ -69,7 +69,7 @@ Before you begin, the following additional tools need to be installed:
 
 * *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and download the latest stable release. Extract the archive and add the directory with the extracted files to your path.
 
-* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). AWS CLI Version 2 is the release of the AWS CLI that is intended for use in production environments, and the version that should be used in this guide. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^] documentation. 
+* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). AWS CLI Version 2 is the release of the AWS CLI that is intended for use in production environments and the version that should be used in this guide. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^] documentation. 
 
 To verify that the AWS CLI is installed correctly, run the following command:
 
