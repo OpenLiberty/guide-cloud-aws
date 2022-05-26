@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019, 2021 IBM Corporation and others.
+// Copyright (c) 2019, 2022 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -42,33 +42,15 @@ Explore how to deploy microservices to Amazon Elastic Container Service for Kube
 
 == What you'll learn
 
-You will learn how to deploy two microservices in Open Liberty containers to a {kube}
-cluster on Amazon Elastic Container Service for Kubernetes (EKS). 
+You will learn how to deploy two microservices in Open Liberty containers to a {kube} cluster on Amazon Elastic Container Service for Kubernetes (EKS). 
 
-Kubernetes is an open source container orchestrator that automates many tasks involved in 
-deploying, managing, and scaling containerized applications. If you would like to learn
-more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
-guide.
+Kubernetes is an open-source container orchestrator that automates many tasks that are involved in deploying, managing, and scaling containerized applications. If you would like to learn more about Kubernetes, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^] guide.
 
-There are different cloud-based solutions for running your Kubernetes workloads.
-A cloud-based infrastructure enables you to focus on developing your microservices without worrying about low-level infrastructure details for deployment. Using a cloud helps
-you to easily scale and manage your microservices in a high-availability setup.
+There are different cloud-based solutions for running your Kubernetes workloads. Cloud-based infrastructure enables you to focus on developing your microservices without worrying about low-level infrastructure details for deployment. Using a cloud helps you to easily scale and manage your microservices in a high-availability setup.
 
-Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon Elastic Container
-Service for {kube} (EKS). EKS simplifies the process of running Kubernetes on AWS without 
-needing to install or maintain your own Kubernetes control plane. It provides a hosted {kube} 
-cluster that you can deploy your microservices to. You will use EKS with Amazon Elastic 
-Container Registry (ECR). Amazon ECR is a private registry that is used to store 
-and distribute your container images. Note, because EKS is not free, there is a small
-cost that is associated with running this guide. See the official
-https://aws.amazon.com/eks/pricing/[Amazon EKS pricing^] documentation for more details.
+Amazon Web Services (AWS) offers a managed Kubernetes service called Amazon Elastic Container Service for {kube} (EKS). EKS simplifies the process of running Kubernetes on AWS without needing to install or maintain your Kubernetes control plane. It provides a hosted {kube} cluster where you can deploy your microservices. You will use EKS with Amazon Elastic Container Registry (ECR). Amazon ECR is a private registry that is used to store and distribute your container images. Note, because EKS is not free, there is a small cost that is associated with running this guide. See the official https://aws.amazon.com/eks/pricing/[Amazon EKS pricing^] documentation for more details.
 
-The two microservices you will deploy are called `system` and `inventory`. 
-The `system` microservice returns the JVM system properties of the running container. 
-It also returns the pod’s name in the HTTP header, making replicas easy to distinguish 
-from each other. The `inventory` microservice adds the properties from the `system` microservice 
-to the inventory. This demonstrates how communication can be established between pods 
-inside a cluster.
+The two microservices you will deploy are called `system` and `inventory`. The `system` microservice returns the JVM system properties of the running container. It also returns the pod’s name in the HTTP header, making replicas easy to distinguish from each other. The `inventory` microservice adds the properties from the `system` microservice to the inventory. This demonstrates how communication can be established between pods inside a cluster.
 
 
 // =================================================================================================
@@ -79,26 +61,15 @@ inside a cluster.
 
 Before you begin, the following additional tools need to be installed:
 
-* *Docker:* You need a containerization software for building containers. Kubernetes 
-supports various container types, but you will use Docker in this guide. For installation 
-instructions, refer to the official https://docs.docker.com/install/[Docker^] documentation.
+* *Docker:* You need containerization software for building containers. Kubernetes supports various container types, but you will use Docker in this guide. For installation instructions, refer to the official https://docs.docker.com/install/[Docker^] documentation.
 
-* *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your 
-Kubernetes cluster. See the official https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install and Set Up kubectl^]
-documentation for information about downloading and setting up `kubectl` on your platform.
+* *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your Kubernetes cluster. See the official https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install and Set Up kubectl^] documentation for information about downloading and setting up `kubectl` on your platform.
 
-* *IAM Authenticator:* To allow IAM authentication for your Amazon EKS cluster, you must install the AWS
-IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^]
-instructions to install the AWS IAM Authenticator on your platform. 
+* *IAM Authenticator:* To allow IAM authentication for your Amazon EKS cluster, you must install the AWS IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^] instructions to install the AWS IAM Authenticator on your platform. 
 
-* *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. 
-Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and 
-download the latest stable release. Extract the archive and add the directory with the 
-extracted files to your path.
+* *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and download the latest stable release. Extract the archive and add the directory with the extracted files to your path.
 
-* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). AWS CLI Version 2 is the release of the AWS CLI that is intended for use in production environments, and the version that should be used in this guide. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official
-https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^]
-documentation. 
+* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). For this guide, use AWS CLI Version 2, which is intended for use in production environment. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^] documentation. 
 
 To verify that the AWS CLI is installed correctly, run the following command:
 
@@ -133,33 +104,20 @@ Before you can deploy your microservices, you must create a {kube} cluster.
 
 === Configuring the AWS CLI
 
-Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM)
-user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^]
-users dashboard and create a user through the UI. While creating a user, you must give the 
-user `programmatic access` when selecting the AWS access type. You will also be prompted
-to add the user to a group. A group allows you to specify permissions for multiple users. 
-If you do not have an existing group, you need to create a new one. Be sure to take note
-of the `AWS Access Key ID` and `AWS Secret Access Key`. After the AWS CLI is installed, it 
-must be configured by running the AWS configure command. 
+Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM)user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^] users dashboard and create a user through the UI. While creating a user, you must give the user `programmatic access` when selecting the AWS access type. You will also be prompted to add the user to a group. A group allows you to specify permissions for multiple users. If you do not have an existing group, you need to create a new one. Be sure to take note of the `AWS Access Key ID` and `AWS Secret Access Key`. After the AWS CLI is installed, it must be configured by running the AWS configure command. 
 
-You will be prompted for several pieces of information, including an `AWS Access Key ID` 
-and an `AWS Secret Access Key`. These keys are associated with the AWS Identity and Access
-Management (IAM) user that you created.
+You will be prompted for several pieces of information, including an `AWS Access Key ID` and an `AWS Secret Access Key`. These keys are associated with the AWS Identity and Access Management (IAM) user that you created.
 
 [role=command]
 ```
 aws configure
 ```
 
-Next, you will be prompted to enter a region. This region will be the region of the servers where
-your requests are sent. Select the region that is closest to you. For a full list of regions, 
-see the https://docs.aws.amazon.com/general/latest/gr/rande.html#eks_region[AWS Regions and Endpoints^].
+Next, you will be prompted to enter a region. This region will be the region of the servers where your requests are sent. Select the region that is closest to you. For a full list of regions, see the https://docs.aws.amazon.com/general/latest/gr/rande.html#eks_region[AWS Regions and Endpoints^].
 
 Finally, enter `json` when you are prompted to enter the output format. 
 
-After you are done filling out this information, the settings are stored in the default 
-profile. Anytime that you run an AWS CLI command without specifying a profile, the default 
-profile is used. 
+After you are done filling out this information, the settings are stored in the default profile. Anytime that you run an AWS CLI command without specifying a profile, the default profile is used. 
 
 You can verify your current configuration values by running the following command: 
 [role=command]
@@ -173,26 +131,21 @@ aws configure list
 
 === Provisioning a cluster
 
-The `eksctl` CLI tool greatly simplifies the process of creating clusters on EKS. To 
-create your cluster, use the `eksctl create cluster` command:
+The `eksctl` CLI tool greatly simplifies the process of creating clusters on EKS. To create your cluster, use the `eksctl create cluster` command:
 
 [role=command]
 ```
 eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
 ```
 
-Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` Amazon
-Elastic Compute Cloud (EC2) instance as the worker node. The `t2.small` EC2 instance is 
-not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^]
-documentation for more details. When the cluster is created, you see an output similar to the following:
+Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` Amazon Elastic Compute Cloud (EC2) instance as the worker node. The `t2.small` EC2 instance is not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^] documentation for more details. When the cluster is created, you see an output similar to the following:
 
 [source, role="no_copy"]
 ```
 [✔]  EKS cluster "guide-cluster" in "us-east-2" region is ready
 ```
 
-After your cluster is ready, EKS connects `kubectl` to the cluster.
-Verify that you're connected to the cluster by checking the cluster's nodes:
+After your cluster is ready, EKS connects `kubectl` to the cluster. Verify that you're connected to the cluster by checking the cluster's nodes:
 
 [role=command]
 ```
@@ -211,9 +164,7 @@ ip.us-east-2.compute.internal   Ready     <none>    7m        v1.11.5
 
 == Deploying microservices to Amazon Elastic Container Service for Kubernetes (EKS)
 
-In this section, you will learn how to deploy two microservices in Open Liberty containers to a {kube}
-cluster on EKS. You will build and containerize the `system` and `inventory` microservices, 
-push them to a container registry, and then deploy them to your {kube} cluster. 
+In this section, you will learn how to deploy two microservices in Open Liberty containers to a {kube} cluster on EKS. You will build and containerize the `system` and `inventory` microservices, push them to a container registry, and then deploy them to your {kube} cluster. 
 
 // =================================================================================================
 // Building and containerizing the microservices
@@ -223,11 +174,7 @@ push them to a container registry, and then deploy them to your {kube} cluster.
 
 The first step of deploying to {kube} is to build your microservices and containerize them.
 
-The starting Java project, which you can find in the `start` directory, is a multi-module Maven
-project. It is made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
-`start/system` and `start/inventory`. Both of these directories contain a Dockerfile, which is necessary
-for building the Docker images. If you're unfamiliar with Dockerfiles, check out the
-https://openliberty.io/guides/containerize.html[Containerizing microservices^] guide.
+The starting Java project, which you can find in the `start` directory, is a multi-module Maven project. It is made up of the `system` and `inventory` microservices. Each microservice resides in its own directory, `start/system` and `start/inventory`. Both of these directories contain a Dockerfile, which is necessary for building the Docker images. If you're unfamiliar with Dockerfiles, check out the https://openliberty.io/guides/containerize.html[Containerizing microservices^] guide.
 
 To build these microservices, navigate to the `start` directory and run the following command:
 
@@ -236,8 +183,6 @@ To build these microservices, navigate to the `start` directory and run the foll
 mvn package
 ```
 
-include::{common-includes}/ol-icr-full-docker-pull.adoc[]
-
 Next, run the `docker build` commands to build the container images for your application:
 [role='command']
 ```
@@ -245,11 +190,9 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
-The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. 
-The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
+The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
-During the build, you see various Docker messages that describe what images are being downloaded and
-built. When the build finishes, run the following command to list all local Docker images:
+During the build, you see various Docker messages that describe what images are being downloaded and built. When the build finishes, run the following command to list all local Docker images:
 
 [role=command]
 ```
@@ -260,14 +203,13 @@ Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are li
 
 [source, role="no_copy"]
 ----
-REPOSITORY                          TAG
-system                              1.0-SNAPSHOT
-inventory                           1.0-SNAPSHOT
-openliberty/open-liberty            full-java11-openj9-ubi        
+REPOSITORY                        TAG
+system                            1.0-SNAPSHOT
+inventory                         1.0-SNAPSHOT
+icr.io/appcafe/open-liberty       kernel-slim-java11-openj9-ubi       
 ----
 
-If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
-build log for any potential errors.
+If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven build log for any potential errors.
 
 // =================================================================================================
 // Pushing the images to a docker registry
@@ -275,30 +217,24 @@ build log for any potential errors.
 
 === Pushing the images to a container registry
 
-Pushing the images to a registry allows the cluster to create pods by using your container images. 
-The registry that you are using is called Amazon Elastic Container Registry (ECR).
+Pushing the images to a registry allows the cluster to create pods by using your container images. The registry that you are using is called Amazon Elastic Container Registry (ECR).
 
-First, you must authenticate your Docker client to your ECR registry. Start by running the
-`get-login` command:
+First, you must authenticate your Docker client to your ECR registry. Start by running the `get-login` command:
 [role=command]
 ```
 aws ecr get-login-password
 ```
 
-The `get-login` command returns a `[password_string]`; take a note of this `[password_string]`. 
-Next, running the following will return the `[aws_account_id]` needed to authenticate your Docker client. 
+The `get-login` command returns a `[password_string]`; take a note of this `[password_string]`. Next, running the following will return the `[aws_account_id]` needed to authenticate your Docker client. 
 
 [role=command]
 ```
 aws sts get-caller-identity --output text --query "Account"
 ```
 
-The `[aws_account_id]` is a unique 12-digit ID that is assigned to every AWS account. You 
-will notice this ID in the output from various commands because AWS uses it to differentiate 
-your resources from other accounts. 
+The `[aws_account_id]` is a unique 12-digit ID that is assigned to every AWS account. You will notice this ID in the output from various commands because AWS uses it to differentiate your resources from other accounts. 
 
-Replace the `[password_string]`, `[aws_account_id]` and the `[region]` your account is configured 
-under in the following `docker login` command, that is used to authenticate your Docker client. 
+Replace the `[password_string]`, `[aws_account_id]` and the `[region]` your account is configured under in the following `docker login` command, that is used to authenticate your Docker client. 
 
 [role=command]
 ```
@@ -327,8 +263,7 @@ You will see an output similar to the following:
 }
 ```
 
-Take note of the repository URI for both the `system` and `inventory` repositories, as you need 
-them when you tag and push your images.
+Take note of the repository URI for both the `system` and `inventory` repositories, as you need them when you tag and push your images.
 
 // Tagging images
 Next, you need to tag your container images with the relevant data about your registry:
@@ -348,8 +283,7 @@ docker push [system-repository-uri]:1.0-SNAPSHOT
 docker push [inventory-repository-uri]:1.0-SNAPSHOT
 ```
 
-When you tag and push your images, remember to substitute `[system-repository-uri]` and 
-`[inventory-repository-uri]` with the appropriate URI for the system and inventory repositories. 
+When you tag and push your images, remember to substitute `[system-repository-uri]` and `[inventory-repository-uri]` with the appropriate URI for the system and inventory repositories. 
 
 // =================================================================================================
 // Deploying the microservices
@@ -359,13 +293,7 @@ When you tag and push your images, remember to substitute `[system-repository-ur
 
 Now that your container images are built, deploy them using a Kubernetes resource definition.
 
-A Kubernetes resource definition is a yaml file that contains a description of all your 
-deployments, services, or any other resources that you want to deploy. All resources can 
-also be deleted from the cluster by using the same yaml file that you used to deploy them.
-The `kubernetes.yaml` resource definition file is provided for you. If you are interested 
-in learning more about the Kubernetes resource definition, check out the 
-https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^]
-guide.
+A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them. The `kubernetes.yaml` resource definition file is provided for you. If you are interested in learning more about the Kubernetes resource definition, check out the https://openliberty.io/guides/kubernetes-intro.html[Deploying microservices to Kubernetes^] guide.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -379,9 +307,7 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[]
 ----
 [role="edit_command_text"]
-The [hotspot=18 hotspot=39]`image` is the name and tag of the container image that you want 
-to use for the container. Update the system [hotspot=18]`image` and the inventory [hotspot=39]`image` 
-fields to point to your `system` and `inventory` repository URIs.
+The [hotspot=18 hotspot=39]`image` is the name and tag of the container image that you want to use for the container. Update the system [hotspot=18]`image` and the inventory [hotspot=39]`image` fields to point to your `system` and `inventory` repository URIs.
 
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
@@ -406,30 +332,33 @@ inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 
 === Making requests to the microservices
 
-Before you can make a request to `[hostname]:31000` or `[hostname]:32000`, you must modify
-the security group to allow incoming traffic through ports `31000` and `32000`. To get the 
-`group-id` of the security group, use the `aws ec2 describe-security-groups` command:
+Before you can make a request to `[hostname]:31000` or `[hostname]:32000`, you must modify the security group to allow incoming traffic through ports `31000` and `32000`. To get the `group-id` of the security group, use the `aws ec2 describe-security-groups` command:
 [role=command]
 ```
-aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-nodegroup*"  --query "SecurityGroups[*].{Name:GroupName,ID:GroupId}"
+aws ec2 describe-security-groups --filters Name=group-name,Values="*eksctl-guide-cluster-cluster-*" --query "SecurityGroups[*].IpPermissions[*].UserIdGroupPairs"
 ```
 
 You will see an output similar to the following:
 
 [source, role="no_copy"]
 ```
-[
+...
     {
-        "Name": "eksctl-guide-cluster-nodegroup-ng-c003308d-SG-1TTGEJ5JUMCI3",
-        "ID": "sg-014ab382e82217bfc"
+        "Description": "Allow nodes to communicate with each other (all ports)",
+        "GroupId": "sg-035c858e1ff9c52f1",
+        "UserId": "208872073932"
+    },
+    {
+        "Description": "Allow managed and unmanaged nodes to communicate with each other (all ports)",
+        "GroupId": "sg-04a0c50049c10ae54",
+        "UserId": "208872073932"
     }
-]
+...
 ```
 
+Copy the value of the `GroupId` which description is "Allow managed and unmanaged nodes to communicate with each other (all ports)". In this example output, the value is `sg-04a0c50049c10ae54`.
 
-Then, add the following rules to the security group to allow incoming traffic through ports
-`31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `ID` in the
-output of the previous command.
+Then, add the following rules to the security group to allow incoming traffic through ports `31000` and `32000`. Don't forget to substitute `[security-group-id]` for the `GroupId` in the output of the previous command.
 
 [role=command]
 ```
@@ -437,25 +366,20 @@ aws ec2 authorize-security-group-ingress --protocol tcp --port 31000 --group-id 
 aws ec2 authorize-security-group-ingress --protocol tcp --port 32000 --group-id [security-group-id] --cidr 0.0.0.0/0
 ```
 
-After you are finished adding the inbound rules to the security group, you might need to 
-wait a few minutes before you try to access the `system` and `inventory` microservices.
+After you finish adding the inbound rules to the security group, you might need to wait a few minutes before you try to access the `system` and `inventory` microservices.
 
-Take note of the `EXTERNAL-IP` in the output of the following command. It is the 
-hostname you will later substitute into `[hostname]`: 
+Take note of the `EXTERNAL-IP` in the output of the following command. It is the hostname you will later substitute into `[hostname]`: 
 [role=command]
 ```
 kubectl get nodes -o wide
 ```
 
-Then, `curl` or visit the following URLs to access your microservices, substituting the 
-appropriate hostname:
+Then, `curl` or visit the following URLs to access your microservices, substituting the appropriate hostname:
 
 * `{system-api}`
 * `{inventory-api}/system-service`
 
-The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
-To view the header, you can use the `-I` option in the `curl` when you make a request to `{system-api}`.
-The second URL adds properties from `system-service` to the inventory.
+The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`. To view the header, you can use the `-I` option in the `curl` when you make a request to `{system-api}`. The second URL adds properties from `system-service` to the inventory.
 
 // =================================================================================================
 // Testing microservices that are running on AWS EKS
@@ -469,10 +393,7 @@ pom.xml
 include::finish/inventory/pom.xml[]
 ----
 
-A few tests are included for you to test the basic functionality of the microservices. If a test failure
-occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
-in the ready state before you proceed further. The default properties that are defined in the [hotspot]`pom.xml`
-file are:
+A few tests are included for you to test the basic functionality of the microservices. If a test failure occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be in the ready state before you proceed further. The default properties defined in the [hotspot]`pom.xml` file are:
 
 [cols="15, 100", options="header"]
 |===
@@ -483,8 +404,7 @@ file are:
 | [hotspot=inventory-node-port file=0]`inventory.node.port`    | The NodePort of the Kubernetes Service `inventory-service`, 32000 by default.
 |===
 
-Use the following command to run the integration tests against your cluster. Substitute 
-`[hostname]` with the appropriate value:
+Use the following command to run the integration tests against your cluster. Substitute `[hostname]` with the appropriate value:
 
 [role=command]
 ```
@@ -522,9 +442,7 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 
 == Deploying new version of system microservice
 
-Optionally, you might want to make changes to your microservice and learn how to redeploy 
-the updated version of your microservice. In this section, you will bump the version of 
-the `system` microservice to `2.0-SNAPSHOT` and redeploy the new version of the microservice.
+Optionally, you might want to make changes to your microservice and learn how to redeploy the updated version of your microservice. In this section, you will bump the version of the `system` microservice to `2.0-SNAPSHOT` and redeploy the new version of the microservice.
 
 Use Maven to repackage your microservice:
 [role=command]
@@ -538,8 +456,7 @@ Next, build the new version of the container image as `2.0-SNAPSHOT`:
 docker build -t system:2.0-SNAPSHOT system/.
 ```
 
-Since you built a new image, it must be pushed to the `awsguide/system` repository
-of your container registry again.
+Since you built a new image, it must be pushed to the `awsguide/system` repository of your container registry again.
 
 // Tagging images
 Tag your container image with the relevant data about your registry:
@@ -557,8 +474,7 @@ Push your image to the registry:
 docker push [system-repository-uri]:2.0-SNAPSHOT
 ```
 
-Update the `system-deployment` deployment to use the new container image that you just
-pushed to the registry:
+Update the `system-deployment` deployment to use the new container image that you just pushed to the registry:
 
 [role=command]
 ```
@@ -579,28 +495,23 @@ inventory-deployment-6fd959cc4-rf2m2   1/1       Running   0          7m
 system-deployment-677b9f5d9c-nqzcf     1/1       Running   0          7m
 ----
 
-Observe that in this case the `system` microservice is running in the pod called 
-`system-deployment-677b9f5d9c-nqzcf`. Substitute the name of your pod into the 
-following command to see more details about the pod:
+Observe that in this case, the `system` microservice is running in the pod called `system-deployment-677b9f5d9c-nqzcf`. Substitute the name of your pod into the following command to see more details about the pod:
 
 [role=command]
 ```
-kubectl describe pod [pod-name]
+kubectl get event --field-selector involvedObject.name=[pod-name]
 ```
 
-View the events at the bottom of the command's output. Notice that the pod is using the 
-new container image `system:2.0-SNAPSHOT`.
+View the events at the bottom of the command's output. Notice that the pod is using the new container image `system:2.0-SNAPSHOT`.
 
 [source, role="no_copy"]
 ----
-Events:
-  Type    Reason     Age   From                                    Message
-  ----    ------     ----  ----                                    -------
-  Normal  Scheduled  1m    default-scheduler                       Successfully assigned default/system-deployment-dd44895f6-wmlkm to ip.us-east-2.compute.internal
-  Normal  Pulling    1m    kubelet, ip.us-east-2.compute.internal  pulling image "[aws_account_id].dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
-  Normal  Pulled     1m    kubelet, ip.us-east-2.compute.internal  Successfully pulled image "[aws_account_id].dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
-  Normal  Created    1m    kubelet, ip.us-east-2.compute.internal  Created container
-  Normal  Started    1m    kubelet, ip.us-east-2.compute.internal  Started container
+LAST SEEN   TYPE     REASON      OBJECT                                   MESSAGE
+97s         Normal   Scheduled   pod/system-deployment-56b4b765d4-9jz5l   Successfully assigned default/system-deployment-56b4b765d4-9jz5l to ip-192-168-85-136.us-east-2.compute.internal
+97s         Normal   Pulling     pod/system-deployment-56b4b765d4-9jz5l   Pulling image "208872073932.dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT"
+95s         Normal   Pulled      pod/system-deployment-56b4b765d4-9jz5l   Successfully pulled image "208872073932.dkr.ecr.us-east-2.amazonaws.com/awsguide/system:2.0-SNAPSHOT" in 1.082459294s
+95s         Normal   Created     pod/system-deployment-56b4b765d4-9jz5l   Created container system-container
+95s         Normal   Started     pod/system-deployment-56b4b765d4-9jz5l   Started container system-container
 ----
 
 // =================================================================================================
@@ -609,11 +520,9 @@ Events:
 
 == Tearing down the environment
 
-It is important to clean up your resources when you are finished with the guide so that 
-you do not incur additional charges for ongoing service.
+It is important to clean up your resources when you are finished with the guide so that you do not incur additional charges for ongoing service.
 
-When you no longer need your deployed microservices, you can delete all {kube} resources 
-by running the `kubectl delete` command:
+When you no longer need your deployed microservices, you can delete all {kube} resources by running the `kubectl delete` command:
 [role='command']
 ```
 kubectl delete -f kubernetes.yaml
@@ -639,8 +548,7 @@ eksctl delete cluster --name guide-cluster
 
 == Great work! You're done!
 
-You just deployed two microservices running in Open Liberty to AWS EKS. You also 
-learned how to use `kubectl` to deploy your microservices on a {kube} cluster.
+You just deployed two microservices running in Open Liberty to AWS EKS. You also learned how to use the `kubectl` command to deploy your microservices on a {kube} cluster.
 
 // Multipane
 include::{common-includes}/attribution.adoc[subs="attributes"]
