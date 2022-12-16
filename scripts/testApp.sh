@@ -3,7 +3,7 @@ set -euxo pipefail
 
 # Test app
 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q clean package
@@ -25,8 +25,8 @@ minikube ip
 curl "http://localhost:31000/system/properties"
 curl "http://localhost:32000/api/inventory/systems/system-service"
 
-mvn failsafe:integration-test "-Dcluster.ip=localhost"
-mvn failsafe:verify
+mvn -ntp failsafe:integration-test "-Dcluster.ip=localhost"
+mvn -ntp failsafe:verify
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
