@@ -32,7 +32,7 @@ minikube ip
 curl "http://$(minikube ip):31000/system/properties"
 curl "http://$(minikube ip):32000/api/inventory/systems/system-service"
 
-mvn -ntp failsafe:integration-test "-Dcluster.ip=localhost"
+mvn -ntp failsafe:integration-test "-Dcluster.ip=$(minikube ip)"
 mvn -ntp failsafe:verify
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
