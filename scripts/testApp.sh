@@ -1,6 +1,13 @@
 #!/bin/bash
 set -euxo pipefail
 
+minikube start
+minikube status
+#kubectl cluster-info
+#kubectl get services --all-namespaces
+#kubectl config view
+eval "$(minikube docker-env)"
+
 # Test app
 
 mvn -ntp -Dhttp.keepAlive=false \
@@ -22,8 +29,8 @@ kubectl get pods
 
 minikube ip
 
-curl "http://localhost:31000/system/properties"
-curl "http://localhost:32000/api/inventory/systems/system-service"
+curl "http://$(minikube ip):31000/system/properties"
+curl "http://$(minikube ip):32000/api/inventory/systems/system-service"
 
 mvn -ntp failsafe:integration-test "-Dcluster.ip=localhost"
 mvn -ntp failsafe:verify
@@ -32,6 +39,9 @@ kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
 
 kubectl delete -f kubernetes.yaml
+
+eval "$(minikube docker-env -u)"
+minikube stop
 
 # Clear .m2 cache
 rm -rf ~/.m2
