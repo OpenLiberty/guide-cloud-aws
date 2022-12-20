@@ -19,6 +19,4 @@ sed -i "s;FROM icr.io/appcafe/open-liberty:kernel-slim-java11-openj9-ubi;FROM $D
 sed -i "s;RUN features.sh;;g" system/Dockerfile inventory/Dockerfile
 cat system/Dockerfile inventory/Dockerfile
 
-sudo ../scripts/startMinikube.sh
-sudo ../scripts/testApp.sh
-sudo ../scripts/stopMinikube.sh
+sudo -u runner ../scripts/testApp.sh
