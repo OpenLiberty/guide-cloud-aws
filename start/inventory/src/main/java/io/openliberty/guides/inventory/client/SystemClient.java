@@ -34,52 +34,34 @@ public class SystemClient {
   private final String PROTOCOL = "http";
 
   @Inject
-  @ConfigProperty(name = "default.http.port")
-  String DEFAULT_PORT;
+  @ConfigProperty(name = "system.http.port")
+  String SYS_HTTP_PORT;
 
   // Wrapper function that gets properties
   public Properties getProperties(String hostname) {
-    String url = buildUrl(PROTOCOL, hostname,
-                          Integer.valueOf(DEFAULT_PORT), SYSTEM_PROPERTIES);
-    Builder clientBuilder = buildClientBuilder(url);
-    return getPropertiesHelper(clientBuilder);
-  }
-
-  // tag::doc[]
-  /**
-   * Builds the URI string to the system service for a particular host.
-   * @param protocol
-   *          - http or https.
-   * @param host
-   *          - name of host.
-   * @param port
-   *          - port number.
-   * @param path
-   *          - Note that the path needs to start with a slash!!!
-   * @return String representation of the URI to the system properties service.
-   */
-  // end::doc[]
-  protected String buildUrl(String protocol, String host, int port, String path) {
-    try {
-      URI uri = new URI(protocol, null, host, port, path, null, null);
-      return uri.toString();
-    } catch (Exception e) {
-      System.err.println("Exception thrown while building the URL: " + e.getMessage());
-      return null;
-    }
-  }
-
-  // Method that creates the client builder
-  protected Builder buildClientBuilder(String urlString) {
-    try {
+      Properties properties = null;
       Client client = ClientBuilder.newClient();
+      try {
+          Builder builder = getBuilder(hostname, client);
+          properties = getPropertiesHelper(builder);
+      } catch (Exception e) {
+          System.err.println(
+          "Exception thrown while getting properties: " + e.getMessage());
+      } finally {
+          client.close();
+      }
+      return properties;
+  }
+
+  //Method that creates the client builder
+  private Builder getBuilder(String hostname, Client client) throws Exception {
+      URI uri = new URI(
+                    PROTOCOL, null, hostname, Integer.valueOf(SYS_HTTP_PORT),
+                    SYSTEM_PROPERTIES, null, null);
+      String urlString = uri.toString();
       Builder builder = client.target(urlString).request();
-      return builder.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-    } catch (Exception e) {
-      System.err.println("Exception thrown while building the client: "
-                         + e.getMessage());
-      return null;
-    }
+      builder.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+      return builder;
   }
 
   // Helper method that processes the request
