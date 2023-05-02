@@ -52,7 +52,7 @@ public class SystemClient {
       }
       return properties;
   }
-  
+
   // Get builder method
   private Builder getBuilder(String hostname, Client client) throws Exception {
       URI uri = new URI(
@@ -65,7 +65,7 @@ public class SystemClient {
   }
 
   /**
-   *  Helper method that processes the request
+   * Helper method that processes the request
    * @param builder
    * @return
    */
@@ -87,4 +87,3 @@ public class SystemClient {
   }
 
 }
-
