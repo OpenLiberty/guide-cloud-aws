@@ -30,6 +30,7 @@
         <inventory.node.port>32000</inventory.node.port>
         <!-- end::inventory-node-port[] -->
         <!-- Liberty configuration -->
+        <liberty.var.system.http.port>9080</liberty.var.system.http.port>
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
     </properties>
