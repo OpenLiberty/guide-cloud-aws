@@ -38,7 +38,7 @@ public class SystemClient {
   String SYS_HTTP_PORT;
 
   // Wrapper function that gets properties
-  public Properties getProperties(String hostname) {
+  public Properties getProperties(final String hostname) {
       Properties properties = null;
       Client client = ClientBuilder.newClient();
       try {
@@ -52,9 +52,8 @@ public class SystemClient {
       }
       return properties;
   }
-
-  //Method that creates the client builder
-  private Builder getBuilder(String hostname, Client client) throws Exception {
+  
+  private Builder getBuilder(final String hostname, final Client client) throws Exception {
       URI uri = new URI(
                     PROTOCOL, null, hostname, Integer.valueOf(SYS_HTTP_PORT),
                     SYSTEM_PROPERTIES, null, null);
@@ -64,8 +63,12 @@ public class SystemClient {
       return builder;
   }
 
-  // Helper method that processes the request
-  protected Properties getPropertiesHelper(Builder builder) {
+  /**
+   *  Helper method that processes the request
+   * @param builder
+   * @return
+   */
+  protected Properties getPropertiesHelper(final Builder builder) {
     try {
       Response response = builder.get();
       if (response.getStatus() == Status.OK.getStatusCode()) {
@@ -77,9 +80,10 @@ public class SystemClient {
       System.err.println("Runtime exception: " + e.getMessage());
     } catch (Exception e) {
       System.err.println("Exception thrown while invoking the request: "
-                          + e.getMessage());
+                         + e.getMessage());
     }
     return null;
   }
 
 }
+
