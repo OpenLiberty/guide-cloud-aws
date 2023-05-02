@@ -37,13 +37,8 @@ public class SystemClient {
   @ConfigProperty(name = "system.http.port")
   String SYS_HTTP_PORT;
 
-  /** 
-   * Wrapper function that gets properties
-   * 
-   * @param hostname
-   * @return
-   */
-  public Properties getProperties(String hostname) {
+  // Wrapper function that gets properties
+  public Properties getProperties(final String hostname) {
       Properties properties = null;
       Client client = ClientBuilder.newClient();
       try {
@@ -58,14 +53,7 @@ public class SystemClient {
       return properties;
   }
   
-/**
- * 
- * @param hostname
- * @param client
- * @return
- * @throws Exception
- */
-  private Builder getBuilder(String hostname, Client client) throws Exception {
+  private Builder getBuilder(final String hostname, final Client client) throws Exception {
       URI uri = new URI(
                     PROTOCOL, null, hostname, Integer.valueOf(SYS_HTTP_PORT),
                     SYSTEM_PROPERTIES, null, null);
@@ -80,7 +68,7 @@ public class SystemClient {
    * @param builder
    * @return
    */
-  protected Properties getPropertiesHelper(Builder builder) {
+  protected Properties getPropertiesHelper(final Builder builder) {
     try {
       Response response = builder.get();
       if (response.getStatus() == Status.OK.getStatusCode()) {
