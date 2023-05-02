@@ -53,7 +53,8 @@ public class SystemClient {
       return properties;
   }
   
-  private Builder getBuilder(final String hostname, final Client client) throws Exception {
+  // Get builder method
+  private Builder getBuilder(String hostname, Client client) throws Exception {
       URI uri = new URI(
                     PROTOCOL, null, hostname, Integer.valueOf(SYS_HTTP_PORT),
                     SYSTEM_PROPERTIES, null, null);
