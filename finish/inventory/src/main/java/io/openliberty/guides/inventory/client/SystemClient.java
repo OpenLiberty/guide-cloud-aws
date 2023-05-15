@@ -69,21 +69,14 @@ public class SystemClient {
    * @param builder
    * @return
    */
-  protected Properties getPropertiesHelper(final Builder builder) {
-    try {
+  private Properties getPropertiesHelper(Builder builder) throws Exception {
       Response response = builder.get();
       if (response.getStatus() == Status.OK.getStatusCode()) {
-        return response.readEntity(Properties.class);
+          return response.readEntity(Properties.class);
       } else {
-        System.err.println("Response Status is not OK.");
+          System.err.println("Response Status is not OK.");
+          return null;
       }
-    } catch (RuntimeException e) {
-      System.err.println("Runtime exception: " + e.getMessage());
-    } catch (Exception e) {
-      System.err.println("Exception thrown while invoking the request: "
-                         + e.getMessage());
-    }
-    return null;
   }
 
 }
