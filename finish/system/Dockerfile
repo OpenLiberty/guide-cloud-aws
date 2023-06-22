@@ -17,6 +17,7 @@ LABEL \
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 RUN features.sh
+RUN features.sh
 COPY --chown=1001:0 target/guide-cloud-aws-system.war /config/apps
 
 RUN configure.sh 
