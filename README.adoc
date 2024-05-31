@@ -131,14 +131,14 @@ aws configure list
 
 === Provisioning a cluster
 
-The `eksctl` CLI tool greatly simplifies the process of creating clusters on EKS. Note that a single `t2.small` Amazon Elastic Compute Cloud (EC2) instance is included in the command by default, this instance is supporting both `i386` and `x86_64` architectures. If you want to build the Docker image that use the other architecture such as ARM64, you can check out the AWS supported instance types by navigating to ##EC2 Dashboard## > ##Instances## > ##Instance Types##. To create your cluster, use the `eksctl create cluster` command:
+The `eksctl` CLI tool greatly simplifies the process of creating clusters on EKS. Note that a single `t2.small` Amazon Elastic Compute Cloud (EC2) instance is included in the command by default (the `t2.small` EC2 instance is not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^] documentation for more details). This instance supports both `i386` and `x86_64` architectures. If you want to build Docker images that use the other architecture such as ARM64, you need to switch the instance type to the corresponding architecture. You can check out the AWS supported instance types by navigating to ##EC2 Dashboard## > ##Instances## > ##Instance Types##. To create your cluster, use the `eksctl create cluster` command:
 
 [role=command]
 ```
 eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
 ```
 
-Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` instance as the worker node. The `t2.small` EC2 instance is not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^] documentation for more details. When the cluster is created, you see an output similar to the following:
+Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` instance as the worker node. When the cluster is created, you see an output similar to the following:
 
 [source, role="no_copy"]
 ```
