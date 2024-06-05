@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019, 2022 IBM Corporation and others.
+// Copyright (c) 2019, 2024 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -12,7 +12,7 @@
 :page-duration: 45 minutes
 :page-releasedate: 2019-05-29
 :page-description: Explore how to deploy microservices to Amazon Elastic Container Service for Kubernetes (EKS) on Amazon Web Services (AWS).
-:page-tags: ['Kubernetes', 'Docker', 'Cloud']
+:page-tags: ['kubernetes', 'docker', 'cloud']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['kubernetes-intro', 'kubernetes-microprofile-config', 'kubernetes-microprofile-health', 'istio-intro']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
@@ -131,14 +131,18 @@ aws configure list
 
 === Provisioning a cluster
 
-The `eksctl` CLI tool greatly simplifies the process of creating clusters on EKS. To create your cluster, use the `eksctl create cluster` command:
+The `eksctl` CLI tool simplifies the process of creating clusters on EKS. By default, the command includes a single `t2.small` Amazon Elastic Compute Cloud (EC2) instance that supports both `i386` and `x86_64` architectures. However, this instance is not covered under the AWS Free Tier. For more information, see the official link:https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^] documentation.
+
+If you need to build Docker images using other architectures, such as `ARM64`, you must switch the instance type accordingly. To view the AWS supported instance types, use the navigation bar in EC2 home to select **Instances** > **Instance Types**. 
+
+To create your cluster, use the `eksctl create cluster` command:
 
 [role=command]
 ```
 eksctl create cluster --name=guide-cluster --nodes=1 --node-type=t2.small
 ```
 
-Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` Amazon Elastic Compute Cloud (EC2) instance as the worker node. The `t2.small` EC2 instance is not included in the AWS free tier. See the official https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^] documentation for more details. When the cluster is created, you see an output similar to the following:
+Running this command creates a cluster that is called `guide-cluster` that uses a single `t2.small` instance as the worker node. When the cluster is created, you will see an output similar to the following example:
 
 [source, role="no_copy"]
 ```
