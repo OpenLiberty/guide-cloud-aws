@@ -133,7 +133,7 @@ aws configure list
 
 The `eksctl` CLI tool simplifies the process of creating clusters on EKS. By default, the command includes a single `t2.small` Amazon Elastic Compute Cloud (EC2) instance that supports both `i386` and `x86_64` architectures. However, this instance is not covered under the AWS Free Tier. For more information, see the official link:https://aws.amazon.com/ec2/pricing/on-demand/[Amazon EC2 pricing^] documentation.
 
-If you need to build Docker images using the other architectures, such as `ARM64`, you will need to switch the instance type accordingly. To view the AWS supported instance types, please check out the navigation bar in EC2 home and navigate to ##Instances## > ##Instance Types##. 
+If you need to build Docker images using other architectures, such as `ARM64`, you must switch the instance type accordingly. To view the AWS supported instance types, use the navigation bar in EC2 home to select **Instances** > **Instance Types**. 
 
 To create your cluster, use the `eksctl create cluster` command:
 
