@@ -65,11 +65,9 @@ Before you begin, the following additional tools need to be installed:
 
 * *kubectl:* You need the Kubernetes command-line tool `kubectl` to interact with your Kubernetes cluster. See the official https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install and Set Up kubectl^] documentation for information about downloading and setting up `kubectl` on your platform.
 
-* *IAM Authenticator:* To allow IAM authentication for your Amazon EKS cluster, you must install the AWS IAM Authenticator for Kubernetes. Follow the https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html[Installing aws-iam-authenticator^] instructions to install the AWS IAM Authenticator on your platform. 
-
 * *eksctl:* In this guide, you will use the `eksctl` Command Line Interface (CLI) tool for provisioning your EKS cluster. Navigate to the https://github.com/weaveworks/eksctl/releases[eksctl releases page^] and download the latest stable release. Extract the archive and add the directory with the extracted files to your path.
 
-* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). For this guide, use AWS CLI Version 2, which is intended for use in production environment. All installers for AWS CLI version 2 include and use an embedded copy of Python, independent of any other Python version that you might have installed. Install the AWS CLI by following the instructions in the official https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^] documentation. 
+* *AWS CLI:* You will need to use the AWS Command Line Interface (CLI). For this guide, use AWS CLI Version 2, which supports IAM authentication for your Amazon EKS cluster and is intended for use in production environments. All installers for AWS CLI version 2 include and use an embedded copy of Python, which operates independently of any other Python version installed on your system. Install the AWS CLI by following the instructions in the official https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html[Installing the AWS CLI^] documentation. 
 
 To verify that the AWS CLI is installed correctly, run the following command:
 
@@ -104,9 +102,12 @@ Before you can deploy your microservices, you must create a {kube} cluster.
 
 === Configuring the AWS CLI
 
-Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM)user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^] users dashboard and create a user through the UI. While creating a user, you must give the user `programmatic access` when selecting the AWS access type. You will also be prompted to add the user to a group. A group allows you to specify permissions for multiple users. If you do not have an existing group, you need to create a new one. Be sure to take note of the `AWS Access Key ID` and `AWS Secret Access Key`. After the AWS CLI is installed, it must be configured by running the AWS configure command. 
+Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM) user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^] users dashboard and create a user through the UI. While creating the user, you must give the user `programmatic access` when selecting the AWS access type. You will be prompted to set permissions for the user. The created user should have the following minimal access levels to perform the guide:
 
-You will be prompted for several pieces of information, including an `AWS Access Key ID` and an `AWS Secret Access Key`. These keys are associated with the AWS Identity and Access Management (IAM) user that you created.
+- Refer to the https://eksctl.io/usage/minimum-iam-policies/[Minimum IAM Policies^] for the main use cases of `eksctl`.
+- Ensure that the https://docs.aws.amazon.com/AmazonECR/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonEC2ContainerRegistryFullAccess[AmazonEC2ContainerRegistryFullAccess^] policy is attached to the IAM account. This policy grants full access to the Amazon Elastic Container Registry, which is necessary for managing container images for your EKS cluster.
+
+Make sure to take note of the `AWS Access Key ID` and `AWS Secret Access Key`, as you will need these to configure the AWS CLI. After the AWS CLI is installed, configure it by running the `aws configure` command. You will be prompted to provide the `AWS Access Key ID` and `AWS Secret Access Key` associated with the IAM user you created.
 
 [role=command]
 ```
@@ -158,8 +159,8 @@ kubectl get nodes
 
 [source, role="no_copy"]
 ----
-NAME                            STATUS    ROLES     AGE       VERSION
-ip.us-east-2.compute.internal   Ready     <none>    7m        v1.11.5
+NAME                                           STATUS   ROLES    AGE   VERSION
+ip-192-168-47-186.us-east-2.compute.internal   Ready    <none>   30m   v1.30.4-eks-a737599
 ----
 
 // =================================================================================================
@@ -190,8 +191,8 @@ mvn package
 Next, run the `docker build` commands to build the container images for your application:
 [role='command']
 ```
-docker build -t system:1.0-SNAPSHOT system/.
-docker build -t inventory:1.0-SNAPSHOT inventory/.
+docker build --platform linux/amd64 -t system:1.0-SNAPSHOT system/.
+docker build --platform linux/amd64 -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
 The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
@@ -457,7 +458,7 @@ mvn package
 Next, build the new version of the container image as `2.0-SNAPSHOT`:
 [role=command]
 ```
-docker build -t system:2.0-SNAPSHOT system/.
+docker build --platform linux/amd64 -t system:2.0-SNAPSHOT system/.
 ```
 
 Since you built a new image, it must be pushed to the `awsguide/system` repository of your container registry again.
