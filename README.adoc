@@ -104,8 +104,8 @@ Before you can deploy your microservices, you must create a {kube} cluster.
 
 Before you configure the AWS CLI, you need to create an AWS Identity and Access Management (IAM) user. Navigate to the https://console.aws.amazon.com/iam/home#/users[Identity and Access Management^] users dashboard and create a user through the UI. While creating the user, you must give the user `programmatic access` when selecting the AWS access type. You will be prompted to set permissions for the user. The created user should have the following minimal access levels to perform the guide:
 
-- Refer to the https://eksctl.io/usage/minimum-iam-policies/[Minimum IAM Policies^] for the main use cases of `eksctl`.
-- Ensure that the https://docs.aws.amazon.com/AmazonECR/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonEC2ContainerRegistryFullAccess[AmazonEC2ContainerRegistryFullAccess^] policy is attached to the IAM account. This policy grants full access to the Amazon Elastic Container Registry, which is necessary for managing container images for your EKS cluster.
+* Refer to the https://eksctl.io/usage/minimum-iam-policies/[Minimum IAM Policies^] for the main use cases of `eksctl`.
+* Ensure that the https://docs.aws.amazon.com/AmazonECR/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonEC2ContainerRegistryFullAccess[AmazonEC2ContainerRegistryFullAccess^] policy is attached to the IAM account. This policy grants full access to the Amazon Elastic Container Registry, which is necessary for managing container images for your EKS cluster.
 
 Make sure to take note of the `AWS Access Key ID` and `AWS Secret Access Key`, as you will need these to configure the AWS CLI. After the AWS CLI is installed, configure it by running the `aws configure` command. You will be prompted to provide the `AWS Access Key ID` and `AWS Secret Access Key` associated with the IAM user you created.
 
