@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
+./mvnw -version
 
 minikube start
 minikube status
@@ -10,7 +11,7 @@ eval "$(minikube docker-env)"
 
 # Test app
 
-mvn -ntp -Dhttp.keepAlive=false \
+./mvnw -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q clean package
@@ -32,8 +33,8 @@ minikube ip
 curl "http://$(minikube ip):31000/system/properties"
 curl "http://$(minikube ip):32000/api/inventory/systems/system-service"
 
-mvn -ntp failsafe:integration-test "-Dcluster.ip=$(minikube ip)"
-mvn -ntp failsafe:verify
+./mvnw -ntp failsafe:integration-test "-Dcluster.ip=$(minikube ip)"
+./mvnw -ntp failsafe:verify
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
